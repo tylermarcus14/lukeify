@@ -1,0 +1,12 @@
+node_modules/
+.idea/
+dist/
+.DS_Store
+.env
+.editorconfig
+tweets.json
+npm-debug.log
+public/styles/lukeify.css
+public/styles/lukeify.css.map
+public/
+node/config.json

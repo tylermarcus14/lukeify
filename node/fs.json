@@ -1,0 +1,52 @@
+{
+    "type": "dir",
+    "aliases": ["/"],
+    "name": "/",
+    "data": [{
+
+        "type": "dir",
+        "name": "home",
+        "data": [{
+
+            "type": "dir",
+            "aliases": ["~"],
+            "name": "visitor",
+            "data": [{
+
+                "type": "dir",
+                "name": "downloads",
+                "data": []
+            },
+            {
+                "type": "file",
+                "name": "test.md",
+                "data": "foo bar baz"
+            },
+            {
+                "type": "dir",
+                "name": "pictures",
+                "data": []
+            },
+            {
+                "type": "dir",
+                "name": "documents",
+                "data": [{
+
+                    "type": "file",
+                    "name": "github.md",
+                    "data": "This is some file"
+                },
+                {
+                    "type": "file",
+                    "name": "about.md",
+                    "data": "text"
+                },
+                {
+                    "type": "file",
+                    "name": "applications-i-use.md",
+                    "data": ""
+                }]
+            }]
+        }]
+    }]
+}

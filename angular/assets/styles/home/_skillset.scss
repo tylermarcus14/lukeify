@@ -1,0 +1,25 @@
+#skillset {
+    ul {
+        display:flex;
+        flex-wrap:wrap;
+    }
+
+    li {
+        list-style-type: none;
+        margin:0.6em 0;
+        padding:0 2.4em;
+        width:50%;
+        position:relative;
+
+        &:before {
+            content:"✓";
+            position:absolute;
+            left:0.4em;
+            color:$sky-dark;
+        }
+
+        @media (max-width: $fullwidthsplit-breakpoint) {
+            width:100%;
+        }
+    }
+}

@@ -1,0 +1,38 @@
+$outline-bg-height: 50em;
+
+#professional-outline {
+    position: absolute;
+    width: 100vw;
+    height: $outline-bg-height;
+    left:0;
+    top:0;
+    background: linear-gradient(105deg, $red 20%, $blue 100%);
+    z-index:-1;
+    transform: skewY(-15deg);
+    transform-origin: 0;
+
+    @media (max-width: $terminal-breakpoint) {
+        transform:none;
+
+        &:after {
+            display:block;
+            content:"";
+            background:linear-gradient(180deg, rgba($steel,0) 20%, $steel 100%);
+            width:100%;
+            height:$outline-bg-height;
+        }
+    }
+}
+
+#introduction {
+    width:100%;
+    text-align:center;
+    margin:1.5em auto;
+    color:$slate-light;
+    font-style:italic;
+    font-size:1.5em;
+
+    @media (max-width: $terminal-breakpoint) {
+        color:white;
+    }
+}

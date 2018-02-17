@@ -1,0 +1,52 @@
+*, *:after, *:before {
+    box-sizing: border-box;
+}
+
+html {
+    background-color:$steel;
+}
+
+body {
+    width:100%;
+    max-width: $page-width;
+    margin:0 auto;
+    padding:0 1em;
+    line-height:1.5;
+    font-size:100%;
+    font-family: $pt-serif;
+}
+
+// block Level elements
+h1, h2, h3, h4, h5, h6 {
+    color:$slate;
+    font-family:$arvo;
+    font-weight:lighter;
+    margin:1em 0 0.5em 0;
+}
+
+h1 {
+    font-size:2em;
+}
+
+h2 {
+    font-size:1.25em;
+}
+
+.wrapper {
+    min-height:calc(100vh -  #{$header-height} - #{$footer-height});
+}
+
+ul {
+    padding:0;
+}
+
+// inline elements
+a:link, a:visited {
+    color:$sky-dark;
+}
+a:hover {
+    color:$sky;
+}
+a:active {
+    color:$bloodhound;
+}

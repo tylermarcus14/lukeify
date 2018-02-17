@@ -1,0 +1,64 @@
+#portfolio {
+    table, tr, td {
+        border: none;
+        border-collapse: collapse;
+    }
+
+    tr {
+        display: block;
+        margin:1.5em 0;
+        transition: all $fast;
+        width:100%;
+        border-left:0.6em solid transparent;
+        position:relative;
+        left:0;
+
+        &:hover {
+            left:0.6em;
+            border-left:0.6em solid $blue;
+        }
+
+        a {
+            text-transform:uppercase;
+            text-decoration:none;
+            font-family:$cabin;
+            letter-spacing:2px;
+            font-size:smaller;
+        }
+    }
+
+    td {
+        padding:1em;
+        vertical-align: middle;
+    }
+
+    caption {
+        text-align:left;
+    }
+
+    p {
+        margin:0;
+    }
+
+    .dates {
+        list-style-type:none;
+        text-transform:uppercase;
+        color:$slate-light;
+        font-family:$cabin;
+        font-size:smaller;
+    }
+
+    .tool-tag {
+        margin:0.6em;
+        height:2em;
+        display:inline-block;
+        float:right;
+        background-repeat:no-repeat;
+        background-size:contain;
+        background-position:center center;
+
+        img {
+            max-height:100%;
+        }
+    }
+}
