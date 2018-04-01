@@ -40,6 +40,15 @@ export class LukeifyService {
     }
 
     /**
+     * Sends a get request to retrieved the cached instagram photos that are stored on my server.
+     *
+     * @returns {Observable<any>}
+     */
+    public getInstas(): Observable<any> {
+        return this.http.get<any>('/api/instas');
+    }
+
+    /**
      * Sends up a command and some state information to the server which returns a terminal snapshot.
      *
      * @param {TerminalContextData} contextData - The context, i.e. directory from which the command is being executed.

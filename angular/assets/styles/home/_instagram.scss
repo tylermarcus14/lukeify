@@ -1,0 +1,58 @@
+#insta {
+  transform:translateY(0);
+  opacity:1;
+  transition:all ease-in-out 0.8s;
+  overflow:hidden;
+
+  ul {
+    display:flex;
+    flex-wrap:wrap;
+    overflow:hidden;
+    width:60%;
+    margin:0 auto;
+
+    @media (max-width: $terminal-breakpoint) {
+      width:70%;
+    }
+
+    @media (max-width: $fullwidthsplit-breakpoint) {
+      width:80%;
+    }
+
+    @media (max-width: $header-breakpoint) {
+      width:100%;
+    }
+  }
+
+  &.hasnt-loaded {
+    visibility:hidden;
+    opacity:0;
+    transform:translateY(-3em);
+
+    li {
+      padding-top:33.33%;
+    }
+
+    img {
+      display:none;
+    }
+  }
+
+  li {
+    width:33.33%;
+    list-style-type:none;
+    font-size:0;
+  }
+
+  img {
+    padding:0.25rem;
+    width:100%;
+  }
+}
+
+#insta-label {
+  text-align:center;
+  color:white;
+  font-size:larger;
+  opacity:0.5;
+}

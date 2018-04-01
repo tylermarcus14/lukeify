@@ -49,6 +49,19 @@ app.get('/api/tweets', (req, res) => {
 });
 
 /**
+ * Gets recent instas from the stored instas.json file.
+ *
+ * @return {express.Response}
+ */
+app.get('/api/instas', (req, res) => {
+    fs.readFile(path.join(__dirname, '../instas.json'), 'utf8', (err, data) => {
+        if (err) return res.status(500).end();
+
+        return res.status(200).json(JSON.parse(data));
+    });
+});
+
+/**
  * For a given command, return the response, and log the data associated with it.
  *
  * @return {express.Response}
