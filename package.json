@@ -9,7 +9,7 @@
     "frontend:prod": "ng build --prod",
     "backend:dev": "tsc -w -p ./node",
     "backend:prod": "tsc -p ./node && cp node/*.json public",
-    "twitter": "node node/twitter.js"
+    "backend:service": "node public/services/CronService.js"
   },
   "author": "Luke Davia",
   "license": "MIT",
@@ -37,6 +37,7 @@
     "nodemailer-mailgun-transport": "^1.3.6",
     "reflect-metadata": "^0.1.12",
     "rxjs": "^5.5.6",
+    "superagent": "^3.8.2",
     "twitter": "^1.7.1",
     "zone.js": "^0.8.20"
   },

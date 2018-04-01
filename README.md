@@ -59,7 +59,7 @@ npm run backend:prod
 
 Then, run `./public/app.js --prod` using your favorite keep-alive tool.
 
-To run the twitter updating functionality, schedule a cron to call `node public/services/Twitter.js` at a frequency of your choosing. 
+To run the Twitter & Instagram updating functionality, schedule a cron to call `node public/services/CronService.js` at a frequency of your choosing. 
 
 ## Built With
 

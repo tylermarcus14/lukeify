@@ -1,11 +1,21 @@
-import {Component} from "@angular/core";
+import {Component, OnInit} from "@angular/core";
+import {LukeifyService} from '../Services/LukeifyService';
 
 @Component({
     'selector': 'home',
     'template': `        
         <section id="professional-outline"></section>
         
-        <img src="assets/images/DSC01363.jpg" id="placeholder" alt="" title="I had something cool I wanted to show here, but it isn't ready for primetime yet. One of my photos of Yosemite however, is certainly an acceptable substitute for now.">
+        <section id="insta" #insta [class.hasnt-loaded]="instasLoaded !== 9">
+            <p id="insta-label">The latest from my Instagram...</p>
+            <ul>
+                <li *ngFor="let insta of instas">
+                    <a *ngIf="insta !== undefined" [href]="'https://instagram.com/p/' + insta.shortcode" target="_blank">
+                        <img [src]="insta.thumb" [alt]="insta.caption" [title]="insta.caption" (load)="imageHasLoaded()">
+                    </a>
+                </li>
+            </ul>
+        </section>
         
         <!--<lukeify-terminal></lukeify-terminal>-->
 		
@@ -176,8 +186,27 @@ import {Component} from "@angular/core";
         <contact></contact>
     `
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
     public dateOfBirth: Date = new Date(1995, 6, 12);
+    public instas: any[] = Array(9).fill(undefined);
+    public instasLoaded = 0;
+
+    public constructor(public lukeifyService: LukeifyService) {
+
+    }
+
+    /**
+     *
+     */
+    public ngOnInit(): void {
+        this.lukeifyService.getInstas().subscribe(images => {
+            this.instas = images;
+        });
+    }
+
+    public imageHasLoaded(): void {
+        this.instasLoaded++;
+    }
 
     /**
      * Returns my current age (at the detriment of many things).
