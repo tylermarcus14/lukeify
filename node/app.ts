@@ -7,7 +7,7 @@ import * as path from 'path';
 const bodyParser    = require('body-parser');
 const express       = require('express');
 
-const config        = require('./config.json');
+const config        = require('../config.json');
 const mailer        = require('./services/Mailer');
 const CommandService= require('./services/CommandService');
 

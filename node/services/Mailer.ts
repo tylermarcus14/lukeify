@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 const mailgunTransport = require('nodemailer-mailgun-transport');
-const config = require('../config.json');
+const config = require('../../config.json');
 
 module.exports.sendMail = function(name, from, message) {
     return new Promise((resolve, reject) => {

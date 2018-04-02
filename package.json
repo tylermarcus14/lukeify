@@ -5,11 +5,13 @@
   "main": "app.js",
   "angular-cli": {},
   "scripts": {
-    "frontend:dev": "ng serve --hmr -e=dev --proxy-config proxy.config.json",
-    "frontend:prod": "ng build --prod",
-    "backend:dev": "tsc -w -p ./node",
-    "backend:prod": "tsc -p ./node && cp node/*.json public",
-    "backend:service": "node public/services/CronService.js"
+    "front:dev": "ng serve --hmr -e=dev --proxy-config proxy.config.json",
+    "front:build": "ng build --prod",
+    "back:dev": "tsc -w -p ./node",
+    "back:build": "tsc -p ./node",
+    "back:run:dev": "node nodedist/app.js --dev",
+    "back:run:prod": "node nodedist/app.js --prod",
+    "back:service": "node nodedist/services/CronService.js"
   },
   "author": "Luke Davia",
   "license": "MIT",

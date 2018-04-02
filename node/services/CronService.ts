@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-const config = require('../config.json');
+const config = require('../../config.json');
 const twitter = require('twitter');
 const superagent = require('superagent');
 

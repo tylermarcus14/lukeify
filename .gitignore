@@ -5,9 +5,10 @@ dist/
 .env
 .editorconfig
 tweets.json
+instas.json
 npm-debug.log
-public/styles/lukeify.css
-public/styles/lukeify.css.map
-public/
-node/config.json
-/instas.json
+nodedist/styles/lukeify.css
+nodedist/styles/lukeify.css.map
+nodedist/
+config.json
+

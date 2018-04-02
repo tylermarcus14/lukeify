@@ -33,13 +33,15 @@ npm install
 
 ### Building
 
-Five scripts are provided for execution at project build time:
+Several scripts are provided for execution for ease of development:
 
-* `frontend:dev`: Runs an Angular Hot Module Reloading environment at localhost:4200.
-* `frontend:prod`: Compiles the frontend using ahead of time compilation and minification to be served by our backend.
-* `backend:dev`: Runs the express.js server with a development environment flag.
-* `backend:prod`: Runs the express.js server with a production environment flag.
-* `twitter`: To be executed via cron at a user's desired frequency to gather tweets from their profile and store them locally to be served.
+* `front:dev`: Runs an Angular Hot Module Reloading environment at localhost:4200.
+* `front:build`: Compiles the frontend using ahead of time compilation and minification to be served by our backend.
+* `back:dev`: Watches for changes and compiles the typescript node server.
+* `back:build`: Compiles the typescript node server.
+* `back:run:dev`: Runs the server in a development environment.
+* `back:run:prod`: Runs the server in a production environment.
+* `back:service`: To be executed via cron at a user's desired frequency to gather tweets & instagram photos from their profile and store them locally to be served.
 
 ## Deployment
 
@@ -48,18 +50,13 @@ Push to GitHub, then from remote repository:
 ```
 git clone https://github.com/lukeify/lukeify.git
 npm install
-npm run frontend:prod
+npm run front:build
+npm run back:build
 ```
 
-Now ensure you have `./node/config.json` configured properly. Follow the exemplar configuration.
+Now ensure you have `./config.json` configured properly. Follow the exemplar configuration. Then, run `npm run back:run:prod` using your favorite keep-alive tool, such as forever.js.
 
-```
-npm run backend:prod
-```
-
-Then, run `./public/app.js --prod` using your favorite keep-alive tool.
-
-To run the Twitter & Instagram updating functionality, schedule a cron to call `node public/services/CronService.js` at a frequency of your choosing. 
+To run the Twitter & Instagram updating functionality, schedule a cron to call `npm run back:service` at a frequency of your choosing. 
 
 ## Built With
 
