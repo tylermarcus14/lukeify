@@ -9,9 +9,9 @@
     "front:build": "ng build --prod",
     "back:dev": "tsc -w -p ./node",
     "back:build": "tsc -p ./node",
-    "back:run:dev": "node nodedist/app.js --dev",
-    "back:run:prod": "node nodedist/app.js --prod",
-    "back:service": "node nodedist/services/CronService.js"
+    "back:run:dev": "node public/app.js --dev",
+    "back:run:prod": "node public/app.js --prod",
+    "back:service": "node public/services/CronService.js"
   },
   "author": "Luke Davia",
   "license": "MIT",

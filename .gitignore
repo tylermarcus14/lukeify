@@ -7,8 +7,7 @@ dist/
 tweets.json
 instas.json
 npm-debug.log
-nodedist/styles/lukeify.css
-nodedist/styles/lukeify.css.map
 nodedist/
+public/
 config.json
 
