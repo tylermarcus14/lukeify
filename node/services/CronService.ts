@@ -7,7 +7,6 @@ const twitter = require('twitter');
 const superagent = require('superagent');
 
 (async () => {
-
     // Twitter
     const client = new twitter({
         consumer_key: config.twitter.consumerKey,
@@ -19,18 +18,19 @@ const superagent = require('superagent');
     client.get('statuses/user_timeline', {
         screen_name: config.twitter.screenName,
         count: config.twitter.tweetCount
-    }, (error, tweets, response) => {
+    }, (error, tweets) => {
         if (error) throw error;
-        fs.writeFile(path.join(__dirname, "../../tweets.json"), JSON.stringify(tweets), () => {});
+        fs.writeFile(path.join(__dirname, "../../tweets.json"), JSON.stringify(tweets));
     });
 
-    // Instagram. This is so fucked up. I spent way too long trying to make this work.
     /**
+     * For a given cookie name, m
      *
-     * @param {string[]} cookies
+     * @param key
+     * @param cookies
      * @returns {string}
      */
-    const getCookieValueFromKey = function(key: string, cookies: string[]): string {
+    const getCookieValueFromKey = function(key, cookies) {
         const cookie = cookies.find(c => c.indexOf(key) !== -1);
         if (!cookie) {
             throw new Error('No key found.');
@@ -39,32 +39,33 @@ const superagent = require('superagent');
     };
 
     /**
-     * generateRequestSignature, a.k.a. 'appeaseInstagram'.
+     * Generates the instagram request signature by md5 hashing a bunch of random variables together.
      *
      * @param rhxGis
      * @param csrfToken
-     * @param userAgent
      * @param queryVariables
+     *
      * @returns {string}
      */
-    const generateRequestSignature = function(rhxGis: string, csrfToken: string, userAgent: string, queryVariables): string {
-        const magicString = `${rhxGis}:${csrfToken}:${userAgent}:${queryVariables}`;
-        return crypto.createHash('md5').update(magicString, 'utf8').digest("hex");
+    const generateRequestSignature = function(rhxGis, csrfToken, queryVariables) {
+        const magicString = `${rhxGis}:${csrfToken}:${queryVariables}`;
+        return crypto
+            .createHash('md5')
+            .update(magicString, 'utf8')
+            .digest("hex");
     };
 
     try {
         const userAgent         = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) AppleWebKit/604.3.5 (KHTML, like Gecko) Version/11.0.1 Safari/604.3.5';
-        const initResponse      = await superagent.get('https://www.instagram.com/');
-        const rhxGis            = (RegExp('"rhx_gis":"([a-f0-9]{32})"', 'g')).exec(initResponse.text)[1];
-        const cookies           = initResponse.header['set-cookie'];
 
-        const csrfTokenCookie   = getCookieValueFromKey('csrftoken', cookies);
-        const midCookie         = getCookieValueFromKey('mid', cookies);
-        const rurCookie         = getCookieValueFromKey('rur', cookies);
+        const initResponse      = await superagent.get('https://www.instagram.com/').set('User-Agent', userAgent);
+
+        const rhxGis            = (RegExp('"rhx_gis":"([a-f0-9]{32})"', 'g')).exec(initResponse.text)[1];
+        const csrfTokenCookie   = getCookieValueFromKey('csrftoken', initResponse.header['set-cookie']);
 
         const queryVariables = JSON.stringify({
-            id: "5380311726",
-            first: 9
+            id: config.instagram.userId,
+            first: config.instagram.postCount
         });
 
         const res = await superagent.get('https://www.instagram.com/graphql/query/')
@@ -73,13 +74,9 @@ const superagent = require('superagent');
                 variables: queryVariables
             })
             .set({
+                'Cookie': `rur=FRC; csrftoken=${csrfTokenCookie}; ig_pr=1`,
                 'User-Agent': userAgent,
-                'Accept': '*/*',
-                'Accept-Language': 'en-US',
-                'Accept-Encoding': 'gzip, deflate',
-                'Connection': 'close',
-                'X-Instagram-GIS': generateRequestSignature(rhxGis, csrfTokenCookie, userAgent, queryVariables),
-                'Cookie': `rur=${rurCookie}; csrftoken=${csrfTokenCookie}; mid=${midCookie}; ig_pr=1`
+                'X-Instagram-Gis': generateRequestSignature(rhxGis, csrfTokenCookie, queryVariables)
             });
 
         const images = res.body.data.user.edge_owner_to_timeline_media.edges.map(image => {
@@ -91,10 +88,9 @@ const superagent = require('superagent');
             }
         });
 
-        fs.writeFile(path.join(__dirname, "../../instas.json"), JSON.stringify(images), () => {});
+        fs.writeFile(path.join(__dirname, "../../instas.json"), JSON.stringify(images));
 
     } catch (e) {
         console.log(e);
     }
 })();
-

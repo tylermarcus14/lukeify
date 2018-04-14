@@ -6,7 +6,7 @@ $outline-bg-height: 50em;
     height: $outline-bg-height;
     left:0;
     top:0;
-    background: linear-gradient(105deg, $red 20%, $blue 100%);
+    background: linear-gradient(105deg, $red 5%, $blue 80%);
     z-index:-1;
     transform: skewY(-15deg);
     transform-origin: 0;
