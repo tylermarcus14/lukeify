@@ -47,8 +47,8 @@ const superagent = require('superagent');
      *
      * @returns {string}
      */
-    const generateRequestSignature = function(rhxGis, csrfToken, queryVariables) {
-        const magicString = `${rhxGis}:${csrfToken}:${queryVariables}`;
+    const generateRequestSignature = function(rhxGis, queryVariables) {
+        const magicString = `${rhxGis}:${queryVariables}`;
         return crypto
             .createHash('md5')
             .update(magicString, 'utf8')
@@ -76,7 +76,7 @@ const superagent = require('superagent');
             .set({
                 'Cookie': `rur=FRC; csrftoken=${csrfTokenCookie}; ig_pr=1`,
                 'User-Agent': userAgent,
-                'X-Instagram-Gis': generateRequestSignature(rhxGis, csrfTokenCookie, queryVariables)
+                'X-Instagram-Gis': generateRequestSignature(rhxGis, queryVariables)
             });
 
         const images = res.body.data.user.edge_owner_to_timeline_media.edges.map(image => {

@@ -8,19 +8,27 @@
     display:flex;
     flex-wrap:wrap;
     overflow:hidden;
-    width:60%;
+    max-width:60%;
     margin:0 auto;
 
     @media (max-width: $terminal-breakpoint) {
-      width:70%;
+      max-width:70%;
     }
 
     @media (max-width: $fullwidthsplit-breakpoint) {
-      width:80%;
+      max-width:80%;
     }
 
     @media (max-width: $header-breakpoint) {
-      width:100%;
+      max-width:100%;
+    }
+
+    @media (min-aspect-ratio: 1/1) and (max-height: $small-vertical-instagram-breakpoint) {
+      max-width:50%;
+    }
+
+    @media (min-aspect-ratio: 1/1) and (max-height: $xsmall-vertical-instagram-breakpoint) {
+      max-width:30%;
     }
   }
 
@@ -54,5 +62,7 @@
   text-align:center;
   color:white;
   font-size:larger;
+  font-family: $cabin;
+  font-style:italic;
   opacity:0.5;
 }
