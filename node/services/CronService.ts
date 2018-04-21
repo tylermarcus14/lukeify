@@ -84,7 +84,8 @@ const superagent = require('superagent');
                 id: image.node.id,
                 caption: image.node.edge_media_to_caption.edges[0].node.text,
                 shortcode: image.node.shortcode,
-                thumb: image.node.thumbnail_resources.pop().src
+                thumb: image.node.thumbnail_resources.pop().src,
+                likes: image.node.edge_media_preview_like.count
             }
         });
 
