@@ -1,10 +1,13 @@
 # lukeify
 
 [![GitHub release](https://img.shields.io/github/release/lukeify/lukeify.svg)](https://github.com/lukeify/lukeify)
-[![David](https://img.shields.io/david/lukeify/lukeify.svg)](https://github.com/lukeify/lukeify)
+[![GitHub license](https://img.shields.io/github/license/lukeify/lukeify.svg)](https://github.com/lukeify/lukeify/blob/master/LICENSE)
+![David (path)](https://img.shields.io/david/lukeify/lukeify.svg?path=node)
+![David (path)](https://img.shields.io/david/lukeify/lukeify.svg?path=angular)
 [![Twitter URL](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://lukeify.com)
 
-![](angular/assets/images/lukeify.png)
+
+![](angular/src/assets/images/lukeify.png)
 
 Personal website including portfolio, skillset, and contact feature.
 
@@ -20,7 +23,7 @@ Contained below are instructions on how to run this project for those who would 
 
 Ensure you have Node Package Manager, the [Angular CLI](https://cli.angular.io), as well as a remote server with the ability to start a node.js script. 
 
-Additionally, please create a `config.json` file based off of the `config.example.json` sample provided and place it in the same directory.
+Additionally, please create a `config.json` file based off of the `config.example.json` sample provided and place it in `./node`.
 
 ### Installation
 
@@ -28,20 +31,21 @@ Additionally, please create a `config.json` file based off of the `config.exampl
 npm install angular-cli -g
 git clone https://github.com/lukeify/lukeify.git
 cd lukeify
-npm install
+cd node && npm install
+cd ../angular && npm install
 ```
 
 ### Building
 
 Several scripts are provided for execution for ease of development:
 
-* `front:dev`: Runs an Angular Hot Module Reloading environment at localhost:4200.
-* `front:build`: Compiles the frontend using ahead of time compilation and minification to be served by our backend.
-* `back:dev`: Watches for changes and compiles the typescript node server.
-* `back:build`: Compiles the typescript node server.
-* `back:run:dev`: Runs the server in a development environment.
-* `back:run:prod`: Runs the server in a production environment.
-* `back:service`: To be executed via cron at a user's desired frequency to gather tweets & instagram photos from their profile and store them locally to be served.
+* `client:start`: Runs an Angular Hot Module Reloading environment at localhost:4200.
+* `client:build`: Compiles the frontend using ahead of time compilation and minification to be served by our backend.
+* `server:dev`: Watches for changes and compiles the typescript node server.
+* `server:build`: Compiles the typescript node server.
+* `server:run:dev`: Runs the server in a development environment.
+* `server:run:prod`: Runs the server in a production environment.
+* `server:run:cron`: To be executed via cron at a user's desired frequency to gather tweets & instagram photos from their profile and store them locally to be served.
 
 ## Deployment
 
@@ -54,9 +58,9 @@ npm run front:build
 npm run back:build
 ```
 
-Now ensure you have `./config.json` configured properly. Follow the exemplar configuration. Then, run `npm run back:run:prod` using your favorite keep-alive tool, such as forever.js.
+Now ensure you have `./node/config.json` configured properly. Follow the exemplar configuration. Then, run `npm run back:run:prod` using your favorite keep-alive tool, such as forever.js.
 
-To run the Twitter & Instagram updating functionality, schedule a cron to call `npm run back:service` at a frequency of your choosing. 
+To run the Twitter & Instagram updating functionality, schedule a cron to call `npm run back:run:cron` at a frequency of your choosing. 
 
 ## Built With
 

@@ -1,0 +1,133 @@
+twitter-feed {
+    line-height:normal;
+    display:flex;
+    flex-wrap:wrap;
+    margin:0 auto;
+    max-width: $page-width;
+
+    // Page heading
+    h1 {
+        width:100%;
+        color:$steel;
+        text-align:center;
+    }
+
+    .individual-tweet {
+        width:33%;
+        min-height:150px;
+        vertical-align: top;
+        padding:0 1em;
+        display:flex;
+        font-size:0.8em;
+
+        @media (max-width: $fullwidthsplit-breakpoint) {
+            width:100%;
+        }
+    }
+
+    // Twitter details, to the left of the twet text
+    .twitter-deets {
+        padding:0 1em;
+    }
+
+    img {
+        border-radius:50%;
+        border:none;
+        margin-bottom:0.5em;
+    }
+
+    .tweet-time {
+      display:block;
+      text-align: center;
+      width:100%;
+
+      a, a:hover {
+        color:$slate-light;
+        text-decoration: none;
+      }
+    }
+
+    .is-a-retweet{
+        width:1.5em;
+        height:1.5em;
+        background:no-repeat url('../images/twitter/retweet-action.png');
+        background-size:contain;
+        margin:0.5em auto;
+    }
+
+    // Twitter text, to the right of the tweet details
+    .twitter-text {
+        width:100%;
+
+        p {
+            margin:0;
+            font-family: $pt-serif;
+            color:$steel;
+        }
+
+        p.title {
+            margin-bottom:0.5em;
+
+            a {
+                color:white;
+
+                &:first-child  {
+                    font-size:1.5em;
+                }
+
+                &:last-child {
+                    font-size:1.2em;
+                    opacity:0.8;
+                }
+            }
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        a:hover {
+          text-decoration: underline;
+          color:$sky;
+        }
+    }
+
+    // Tweet actions
+    .tweet-actions {
+        float:right;
+        margin-top:0.5em;
+
+        .intent {
+            float:left;
+
+            a {
+                width:2.5em;
+                height:2em;
+                float:left;
+                background-repeat:no-repeat;
+                background-size:contain;
+                background-position:center center;
+            }
+
+            &.reply a {
+                background-image:url('../images/twitter/reply-action.png');
+            }
+
+            &.retweet a {
+                background-image:url('../images/twitter/retweet-action.png');
+
+                &:hover {
+                    background-image:url('../images/twitter/retweet-action-on.png');
+                }
+            }
+
+            &.like a {
+                background-image:url('../images/twitter/like-action.png');
+
+                &:hover {
+                    background-image:url('../images/twitter/like-action-on.png');
+                }
+            }
+        }
+    }
+}

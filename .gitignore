@@ -1,13 +1,10 @@
 node_modules/
+public/
 .idea/
-dist/
 .DS_Store
 .env
-.editorconfig
 tweets.json
 instas.json
 npm-debug.log
-nodedist/
-public/
 config.json
-
+package-lock.json

@@ -1,0 +1,113 @@
+#insta {
+  transform:translateY(0);
+  opacity:1;
+  transition:all ease-in-out 0.8s;
+  overflow:hidden;
+
+  ul {
+    display:flex;
+    flex-wrap:wrap;
+    overflow:hidden;
+    max-width:60%;
+    margin:0 auto;
+
+    @media (max-width: $terminal-breakpoint) {
+      max-width:70%;
+    }
+
+    @media (max-width: $fullwidthsplit-breakpoint) {
+      max-width:80%;
+    }
+
+    @media (max-width: $header-breakpoint) {
+      max-width:100%;
+    }
+
+    @media (min-aspect-ratio: 1/1) and (max-height: $small-vertical-instagram-breakpoint) {
+      max-width:50%;
+    }
+
+    @media (min-aspect-ratio: 1/1) and (max-height: $xsmall-vertical-instagram-breakpoint) {
+      max-width:30%;
+    }
+  }
+
+  &.hasnt-loaded {
+    visibility:hidden;
+    opacity:0;
+    transform:translateY(-3em);
+
+    li {
+      padding-top:33.33%;
+    }
+
+    img {
+      display:none;
+    }
+  }
+
+  li {
+    width:33.33%;
+    list-style-type:none;
+    font-size:0;
+    z-index:1;
+    padding:0.25rem;
+    position:relative;
+  }
+
+  a {
+    position:relative;
+    display:block;
+    transition:all 0.3s ease-in-out;
+    overflow:hidden;
+    text-align: center;
+
+    &:hover {
+      background-color:rgba(#222233, 0.6);
+      transition:all 0.1s ease-in-out;
+    }
+  }
+
+  img {
+    position:relative;
+    width:100%;
+    z-index:-1;
+  }
+
+  .like-heart {
+    max-width:10%;
+    fill:white;
+    vertical-align: middle;
+  }
+
+  .like-count {
+    vertical-align: middle;
+    margin-left:0.2em;
+  }
+
+  .like-data {
+    opacity:0;
+    position:absolute;
+    width:100%;
+    top:40%;
+    font-size:1.5rem;
+    color:white;
+    font-family:$cabin;
+    transform:scale(3);
+    transition:all 0.2s ease 0.1s;
+  }
+
+  a:hover .like-data {
+    opacity:1;
+    transform:scale(1);
+  }
+}
+
+#insta-label {
+  text-align:center;
+  color:white;
+  font-size:larger;
+  font-family: $cabin;
+  font-style:italic;
+  opacity:0.5;
+}

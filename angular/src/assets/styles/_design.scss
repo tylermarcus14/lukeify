@@ -1,0 +1,34 @@
+// Colors
+$red:                   #c4918a;
+$bloodhound:            #FF7F66;
+    $bloodhound-dark:   darken($bloodhound, 10%);
+$blue:                  #6093c4;
+$sky:                   #7ECEFD;
+    $sky-dark:          darken($sky, 20%);
+    $sky-darker:        darken($sky, 30%);
+$slate:                 #3E454C;
+    $slate-light:       lighten($slate, 40%);
+$steel:                 #F8F8FC;
+    $steel-dark:        darken($steel, 10%);
+
+// Typefaces
+$cabin:                 'Cabin', sans-serif;
+$pt-serif:              'PT Serif', serif;
+$source-code-pro:       'Source Code Pro', monospace;
+
+// Variables
+$page-width:            75em;
+$footer-height:         31.25em;
+$header-height:         6.25em;
+$border-radius:         5px;
+
+// Transitions
+$fast:                  0.3s;
+
+// Breakpoints
+$terminal-breakpoint:       60em;
+$fullwidthsplit-breakpoint: 50em;
+$header-breakpoint:         37.5em;
+
+$small-vertical-instagram-breakpoint: 1200px;
+$xsmall-vertical-instagram-breakpoint: 900px;
