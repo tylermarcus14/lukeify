@@ -1,0 +1,123 @@
+// Colors
+$purple:                                #8447b6;
+  $purple-dark:                         darken($purple, 20%);
+$blue:                                  #6093c4;
+$sky:                                   #7ECEFD;
+    $sky-dark:                          darken($sky, 20%);
+    $sky-darker:                        darken($sky, 30%);
+$slate:                                 #3E454C;
+    $slate-light:                       lighten($slate, 40%);
+$steel:                                 #F8F8FC;
+    $steel-dark:                        darken($steel, 10%);
+
+// Variables
+$page-width:                            75em;
+$footer-height:                         31.25em;
+$header-height:                         6.25em;
+$border-radius:                         5px;
+
+// Transitions
+$fast:                                  0.3s;
+
+// Breakpoints
+$terminal-breakpoint:                   60em;
+$fullwidthsplit-breakpoint:             50em;
+$header-breakpoint:                     40em;
+
+$small-vertical-instagram-breakpoint:   1200px;
+$xsmall-vertical-instagram-breakpoint:  900px;
+
+// Typefaces
+$cabin:                                 'Cabin', sans-serif;
+$sf-mono:                               'SF Mono', 'Source Code Pro', monospace;
+$inter-ui:                              'Inter UI', sans-serif;
+
+@font-face {
+  font-family: 'Inter UI';
+  font-style:  normal;
+  font-weight: 400;
+  src: url("../typefaces/Inter-UI-Regular.woff2") format("woff2"),
+  url("../typefaces/Inter-UI-Regular.woff") format("woff");
+}
+@font-face {
+  font-family: 'Inter UI';
+  font-style:  italic;
+  font-weight: 400;
+  src: url("../typefaces/Inter-UI-Italic.woff2") format("woff2"),
+  url("../typefaces/Inter-UI-Italic.woff") format("woff");
+}
+
+@font-face {
+  font-family: 'Inter UI';
+  font-style:  normal;
+  font-weight: 500;
+  src: url("../typefaces/Inter-UI-Medium.woff2") format("woff2"),
+  url("../typefaces/Inter-UI-Medium.woff") format("woff");
+}
+@font-face {
+  font-family: 'Inter UI';
+  font-style:  italic;
+  font-weight: 500;
+  src: url("../typefaces/Inter-UI-MediumItalic.woff2") format("woff2"),
+  url("../typefaces/Inter-UI-MediumItalic.woff") format("woff");
+}
+
+@font-face {
+  font-family: 'Inter UI';
+  font-style:  normal;
+  font-weight: 600;
+  src: url("../typefaces/Inter-UI-SemiBold.woff2") format("woff2"),
+  url("../typefaces/Inter-UI-SemiBold.woff") format("woff");
+}
+@font-face {
+  font-family: 'Inter UI';
+  font-style:  italic;
+  font-weight: 600;
+  src: url("../typefaces/Inter-UI-SemiBoldItalic.woff2") format("woff2"),
+  url("../typefaces/Inter-UI-SemiBoldItalic.woff") format("woff");
+}
+
+@font-face {
+  font-family: 'Inter UI';
+  font-style:  normal;
+  font-weight: 700;
+  src: url("../typefaces/Inter-UI-Bold.woff2") format("woff2"),
+  url("../typefaces/Inter-UI-Bold.woff") format("woff");
+}
+@font-face {
+  font-family: 'Inter UI';
+  font-style:  italic;
+  font-weight: 700;
+  src: url("../typefaces/Inter-UI-BoldItalic.woff2") format("woff2"),
+  url("../typefaces/Inter-UI-BoldItalic.woff") format("woff");
+}
+
+@font-face {
+  font-family: 'Inter UI';
+  font-style:  normal;
+  font-weight: 800;
+  src: url("../typefaces/Inter-UI-ExtraBold.woff2") format("woff2"),
+  url("../typefaces/Inter-UI-ExtraBold.woff") format("woff");
+}
+@font-face {
+  font-family: 'Inter UI';
+  font-style:  italic;
+  font-weight: 800;
+  src: url("../typefaces/Inter-UI-ExtraBoldItalic.woff2") format("woff2"),
+  url("../typefaces/Inter-UI-ExtraBoldItalic.woff") format("woff");
+}
+
+@font-face {
+  font-family: 'Inter UI';
+  font-style:  normal;
+  font-weight: 900;
+  src: url("../typefaces/Inter-UI-Black.woff2") format("woff2"),
+  url("../typefaces/Inter-UI-Black.woff") format("woff");
+}
+@font-face {
+  font-family: 'Inter UI';
+  font-style:  italic;
+  font-weight: 900;
+  src: url("../typefaces/Inter-UI-BlackItalic.woff2") format("woff2"),
+  url("../typefaces/Inter-UI-BlackItalic.woff") format("woff");
+}

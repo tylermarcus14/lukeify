@@ -2,14 +2,14 @@
 
 [![GitHub release](https://img.shields.io/github/release/lukeify/lukeify.svg)](https://github.com/lukeify/lukeify)
 [![GitHub license](https://img.shields.io/github/license/lukeify/lukeify.svg)](https://github.com/lukeify/lukeify/blob/master/LICENSE)
-![David (path)](https://img.shields.io/david/lukeify/lukeify.svg?path=node)
-![David (path)](https://img.shields.io/david/lukeify/lukeify.svg?path=angular)
+![David (path)](https://img.shields.io/david/lukeify/lukeify.svg?path=client)
+![David (path)](https://img.shields.io/david/lukeify/lukeify.svg?path=server)
 [![Twitter URL](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://lukeify.com)
 
 
-![](angular/src/assets/images/lukeify.png)
+![](client/src/assets/images/lukeify.png)
 
-Personal website including portfolio, skillset, and contact feature.
+Personal website including portfolio & skillset.
 
 ## User Instructions
 
@@ -21,18 +21,18 @@ Contained below are instructions on how to run this project for those who would 
 
 ### Prerequisites
 
-Ensure you have Node Package Manager, the [Angular CLI](https://cli.angular.io), as well as a remote server with the ability to start a node.js script. 
+Ensure you have Yarn, the [Angular CLI](https://cli.angular.io), as well as a remote server with the ability to start a node.js script. 
 
-Additionally, please create a `config.json` file based off of the `config.example.json` sample provided and place it in `./node`.
+Additionally, please create a `config.json` file based off of the `config.example.json` sample provided and place it in `./server`.
 
 ### Installation
 
 ```
-npm install angular-cli -g
+yarn install angular-cli -g
 git clone https://github.com/lukeify/lukeify.git
 cd lukeify
-cd node && npm install
-cd ../angular && npm install
+cd node && yarn install
+cd ../angular && yarn install
 ```
 
 ### Building
@@ -58,16 +58,15 @@ npm run front:build
 npm run back:build
 ```
 
-Now ensure you have `./node/config.json` configured properly. Follow the exemplar configuration. Then, run `npm run back:run:prod` using your favorite keep-alive tool, such as forever.js.
-
-To run the Twitter & Instagram updating functionality, schedule a cron to call `npm run back:run:cron` at a frequency of your choosing. 
+Now ensure you have `./server/config.json` configured properly. Follow the exemplar configuration. Then, run `yarn run back:run:prod` using your favorite keep-alive tool, such as forever.js. To run the Twitter & Instagram updating functionality, schedule a cron to call `yarn run back:run:cron` at a frequency of your choosing. 
 
 ## Built With
 
-* Node.js & express.js
-* NPM
-* Angular (TypeScript)
-* Sass
+* Node.js (Runtime Environment)
+* Express.js (Web Framework)
+* Yarn (Package Manager)
+* Angular (Frontend Framework)
+* Sass (Styling)
 
 ## Versioning
 

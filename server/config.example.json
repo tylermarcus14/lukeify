@@ -1,0 +1,11 @@
+{
+  "hostname": "",
+  "twitter": {
+    "consumerKey": "",
+    "consumerSecret": "",
+    "tokenKey": "",
+    "tokenSecret": "",
+    "screenName": "",
+    "tweetCount": 0
+  }
+}

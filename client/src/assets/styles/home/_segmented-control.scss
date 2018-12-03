@@ -1,0 +1,38 @@
+#segmented-control {
+  margin:0 auto;
+  list-style-type: none;
+  display:flex;
+  justify-content:center;
+  font-family: $cabin;
+  font-weight:lighter;
+
+  li {
+    color:white;
+    padding:0.25em 1em;
+    border:1px solid white;
+    min-width:9em;
+    text-align:center;
+    cursor:pointer;
+
+    &:first-child {
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;
+    }
+
+    &:last-child {
+      border-left:none;
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+
+    &.active {
+      background-color:rgba(white, 0.2);
+      color:white;
+    }
+
+    &:active {
+      padding-top:0.35em;
+      padding-bottom:0.15em;
+    }
+  }
+}
