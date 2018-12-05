@@ -43,12 +43,13 @@ lukeify-terminal {
 }
 
 .terminal-button {
-  width:0.9em;
-  height:0.9em;
-  border-radius:50%;
-  display:inline-block;
-  margin:0 0.4em;
-  transition:all 0.1s ease-in-out;
+    width:0.9em;
+    height:0.9em;
+    border-radius:50%;
+    display:inline-block;
+    margin:0 0.4em;
+    transition:all 50ms ease-in-out;
+    cursor:pointer;
 
   &.terminal-not-focused {
     background-color:#e0e0e8 !important;
@@ -56,18 +57,37 @@ lukeify-terminal {
   }
 
   &.term-button-red {
-    background-color:rgb(255, 84, 60);
-    border:1px solid darken(rgb(255, 84, 60), 10%);
+      $term-red: rgb(255, 84, 60);
+    background-color:$term-red;
+    border:1px solid darken($term-red, 10%);
+
+      &:active {
+          background-color:darken($term-red, 15%);
+          border:1px solid darken(darken($term-red, 10%), 10%);
+      }
   }
 
   &.term-button-amber {
-    background-color:rgb(255, 210, 40);
-    border:1px solid darken(rgb(255, 210, 40), 10%);
+      $term-amber: rgb(255, 210, 40);
+    background-color:$term-amber;
+    border:1px solid darken($term-amber, 10%);
+
+      &:active {
+          background-color:darken($term-amber, 15%);
+          border:1px solid darken(darken($term-amber, 10%), 10%);
+      }
   }
 
   &.term-button-green {
-    background-color:rgb(76, 231, 48);
-    border:1px solid darken(rgb(76, 231, 48), 10%);
+    $term-green: rgb(76, 231, 48);
+
+    background-color:$term-green;
+    border:1px solid darken($term-green, 10%);
+
+      &:active {
+          background-color:darken($term-green, 15%);
+          border:1px solid darken(darken($term-green, 10%), 10%);
+      }
   }
 }
 
@@ -76,7 +96,7 @@ lukeify-terminal {
   padding:0.2em;
   -webkit-backdrop-filter: blur(0.75em);
   backdrop-filter: blur(0.75em);
-  overflow:hidden;
+  overflow-x:auto;
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
@@ -105,6 +125,7 @@ lukeify-terminal {
 
 #terminal-history {
   width:100%;
+    position:relative;
 }
 
 #terminal-entry {
@@ -131,17 +152,12 @@ input, textarea, select, option, button {
 }
 
 input, textarea {
-  border:1px solid $steel-dark;
-  padding:0.6em 0.5em;
-  font-size:0.9em;
-  outline:none;
-  transition:border 0.3s, box-shadow 0.3s;
-  border-radius:0;
-  display:inline-block;
-  appearance:none;
-}
-
-textarea {
-  width:100%;
-  resize:vertical;
+    border: 1px solid $steel-dark;
+    padding: 0.6em 0.5em;
+    font-size: 0.9em;
+    outline: none;
+    transition: border 0.3s, box-shadow 0.3s;
+    border-radius: 0;
+    display: inline-block;
+    appearance: none;
 }

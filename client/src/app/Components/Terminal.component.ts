@@ -1,9 +1,17 @@
-import {AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild} from "@angular/core";
+import {
+    AfterViewInit,
+    Component,
+    ElementRef,
+    EventEmitter,
+    OnInit,
+    Output,
+    ViewChild
+} from "@angular/core";
 import {fromEvent} from "rxjs";
 import {first} from "rxjs/operators";
 import {LukeifyService} from "../Services/LukeifyService";
-import {TerminalCommandResponse} from '../Interfaces/TerminalCommandResponse';
-import {TerminalContextData} from "../Interfaces/TerminalContextData";
+import {TerminalResponse} from '../Interfaces/TerminalResponse';
+import {TerminalState} from "../Interfaces/TerminalState";
 
 @Component({
     selector: 'lukeify-terminal',
@@ -16,35 +24,117 @@ import {TerminalContextData} from "../Interfaces/TerminalContextData";
                 <span class="terminal-button term-button-green" [class.terminal-not-focused]="!terminalHasFocus"></span>
             </div>
 
-            <div id="terminal">
+            <div id="terminal" #terminal>
                 <span #terminalHistory id="terminal-history"></span>
-                <span #terminalContext id="terminal-context"></span>
-                <input #terminalEntry id="terminal-entry" type="text" 
-                       (ngModelChange)="onKeyUp($event)" 
-                       [ngModel]="userEntryData.stack[userEntryData.index].altered" placeholder="Terminal interactivity coming soon :)">
+                <span #terminalState id="terminal-state"></span>
+                <input #terminalEntry id="terminal-entry" type="text" autocomplete="off" spellcheck="false"
+                       [(ngModel)]="entryStack[entryStackIndex][entryStackType]"
+                       (keyup)="onKeyUp($event)">
             </div>
         </div>
     `
 })
+/**
+ * @class TerminalComponent
+ */
 export class TerminalComponent implements OnInit, AfterViewInit {
 
+    @ViewChild('terminal') public _terminal;
     @ViewChild('terminalHistory') public _terminalHistory;
-    @ViewChild('terminalContext') public _terminalContext;
+    @ViewChild('terminalState') public _terminalState;
     @ViewChild('terminalEntry') public _terminalEntry;
 
+    /**
+     *
+     */
     @Output() public emitHeight : EventEmitter<number> = new EventEmitter<number>();
 
     /**
      *
      */
-    public terminalContextData: TerminalContextData;
+    public entryStack = [{ original: "", altered: "" }];
+    public entryStackIndex = 0;
+    public entryStackType = "original";
 
-    public userEntryData = {
-        stack: [{ original: "", altered: "" }],
-        index: 0
+    /**
+     *
+     */
+    public terminalHasFocus: boolean = true;
+    public terminalStateData: TerminalState;
+
+    /**
+     * A set of hooks that can be run by the terminal playground before and after history has been cleared.
+     */
+    private hooks = {
+        clear: async () => {
+            this.terminalHistory = "";
+            return;
+        },
+        reset: async() => {
+            await this.ngOnInit();
+            return;
+        }
     };
 
-    public terminalHasFocus: boolean = true;
+    /**
+     *
+     */
+    private fs = {
+        "type": "dir",
+        "aliases": ["/"],
+        "name": "",
+        "data": [{
+
+            "type": "dir",
+            "name": "home",
+            "data": [{
+
+                "type": "dir",
+                "aliases": ["~"],
+                "name": "visitor",
+                "data": [{
+
+                    "type": "dir",
+                    "name": "downloads",
+                    "data": [{
+                        "type": "file",
+                        "name": ""
+                    }]
+                },
+                    {
+                        "type": "file",
+                        "name": "README.md",
+                        "data": "This is a simple JavaScript terminal playground that you can interact with that showcases some of my work."
+                    },
+                    {
+                        "type": "dir",
+                        "name": "pictures",
+                        "data": []
+                    },
+                    {
+                        "type": "dir",
+                        "name": "documents",
+                        "data": [{
+
+                            "type": "file",
+                            "name": "github.md",
+                            "data": "This is some file"
+                        },
+                            {
+                                "type": "file",
+                                "name": "about.md",
+                                "data": "text"
+                            },
+                            {
+                                "type": "file",
+                                "name": "apps.md",
+                                "data": ""
+                            }]
+                    }]
+            }]
+        }]
+    };
+
 
     /**
      *
@@ -64,29 +154,38 @@ export class TerminalComponent implements OnInit, AfterViewInit {
     /**
      *
      */
-    public get terminalContext() : string {
-        return this._terminalContext.nativeElement.innerHTML;
+    public get terminalState() : string {
+        return this._terminalState.nativeElement.innerHTML;
     }
 
     /**
+     * Sets the current terminal state, also updating the width of the input element.
+     *
+     * @setter
      *
      * @param {string} data
      */
-    public set terminalContext(data: string) {
-        this._terminalContext.nativeElement.innerHTML = data;
-        this._terminalContext.nativeElement.style.width = this._terminalContext.nativeElement.width;
+    public set terminalState(data: string) {
+        this._terminalState.nativeElement.innerHTML = data;
+        this._terminalState.nativeElement.style.width = this._terminalState.nativeElement.width;
     }
 
+    /**
+     * Constructor.
+     *
+     * @param element {ElementRef} - The element reference to this component.
+     * @param lukeifyService {LukeifyService} - The service by which we make requests to our server.
+     */
     public constructor(public element: ElementRef, public lukeifyService: LukeifyService) {}
 
     /**
-     *
+     * When the component is initialized, fetch the initial terminal configuration from our server.
      */
-    public ngOnInit() : void {
-        this.lukeifyService.getInitialTerminalConfiguration().subscribe((response: TerminalCommandResponse) => {
+    public ngOnInit(): void {
+        this.lukeifyService.getInitialTerminalConfiguration().subscribe((response: TerminalResponse) => {
             this.terminalHistory = response.response;
-            this.terminalContext = this.asHumanReadableTerminalContext(response.context);
-            this.terminalContextData = response.context;
+            this.terminalState = this.asHumanReadableTerminalState(response.state);
+            this.terminalStateData = response.state;
         });
     }
 
@@ -98,7 +197,8 @@ export class TerminalComponent implements OnInit, AfterViewInit {
     }
 
     /**
-     * Function to be called when the terminal container is clicked.
+     * Function to be called when the terminal container is clicked. This toggles the color indications of the exit, minimise,
+     * maximise buttons in the terminal 'window'.
      *
      * @param {MouseEvent} $event - The event that triggered this function call.
      */
@@ -118,25 +218,64 @@ export class TerminalComponent implements OnInit, AfterViewInit {
      *
      * @param $event
      */
-    public onKeyUp($event: KeyboardEvent) : void {
-        /*if ($event.which === 13) { // Enter
-            const entrySnapshot = this.userEntryData.stack[this.userEntryData.index];
+    public onNgModelChange($event: KeyboardEvent) : void {
+    }
 
-            this.userEntryData.stack.push("");
-            this.userEntryData.index = this.userEntryData.stack.length - 1;
+    /**
+     * Intercept keyup events from the input to tell when special keys (enter, arrows, etc) are pressed. For example, when
+     * the enter key is pressed, we send a request off to our server to process the entered text from the user.
+     *
+     * @param $event {KeyboardEvent} - The keyboard event which caused the running of this method.
+     *
+     */
+    public onKeyUp($event: KeyboardEvent): void {
+        // When the enter key is pressed, send a request off to the server to interpret the result.
+        if ($event.key === "Enter") {
+            // Grab the current entry text.
+            const entry = this.entryStack[this.entryStackIndex].original;
 
-            this.lukeifyService.getCommand(this.terminalHistory, this.terminalContextData, entrySnapshot).subscribe((response: TerminalCommandResponse) => {
-                this.terminalHistory = response.terminalHistory;
-                this.terminalContextData = response.context;
-                this.terminalContext = this.asHumanReadableTerminalContext(response.context);
+            // Make a request, passing through the terminal
+            this.lukeifyService.getCommand(this.terminalStateData, entry, this.fs).subscribe((response: TerminalResponse) => {
+
+                // Before the history of the client-side terminal is cleared, execute any hooks.
+                for (let hook of response.beforeHook) {
+                    this.hooks[hook]();
+                }
+
+                // Append the response from the server to the terminal history.
+                this.terminalHistory += response.response;
+
+                // After the history of the client-size terminal is cleared, execute any hooks.
+                for (let hook of response.afterHook) {
+                    this.hooks[hook]();
+                }
+
+                // Push a new entry onto the entry stack so that the user can arrow key backwards and forwards through
+                // what they've typed.
+                this.entryStack.push({ "original": "", "altered": "" });
+                this.entryStackIndex++;
+
+                // Update the terminal state from the server's response
+                this.terminalStateData = response.state;
+                this.terminalState = this.asHumanReadableTerminalState(response.state);
+
+                // Update the filesystem from the server's response, if it exists
+                if (response.hasOwnProperty('fs')) {
+                    this.fs = response.fs;
+                }
+
+                // Make sure the new input is always in view
+                this._terminal.nativeElement.scrollTop = this._terminalEntry.nativeElement.offsetTop;
             });
+        }
 
-        } else if ($event.which === 38) { // Arrow up
+        /*
+        } else if ($event.key === "Arrow Up") {
             if (this.userEntryData.index > 0) {
                 this.userEntryData.index--;
             }
 
-        } else if ($event.which === 40) { // Arrow down
+        } else if ($event.key === "Arrow Down") {
             if (this.userEntryData.index < this.userEntryData.stack.length - 1) {
                 this.userEntryData.index++;
             }
@@ -146,17 +285,17 @@ export class TerminalComponent implements OnInit, AfterViewInit {
     /**
      *
      *
-     * @param {TerminalContextData} terminalContextData
+     * @param {TerminalState} terminalState
      *
      * @returns {string}
      */
-    private asHumanReadableTerminalContext(terminalContextData: TerminalContextData) : string {
-        let trimmedDirOrAlias = terminalContextData.pwd.split("/").pop();
+    private asHumanReadableTerminalState(terminalState: TerminalState) : string {
+        let trimmedDirOrAlias = terminalState.pwd.split("/").pop();
 
-        if (terminalContextData.alias !== null) {
-            trimmedDirOrAlias =  terminalContextData.alias;
+        if (terminalState.alias !== null) {
+            trimmedDirOrAlias = terminalState.alias;
         }
 
-        return '<span class="term-color term-sky">' + terminalContextData.user + '</span>:<span class="term-color term-red">' + trimmedDirOrAlias + '</span>$&nbsp;';
+        return '<span class="term-color term-sky">' + terminalState.user + '</span>:<span class="term-color term-red">' + trimmedDirOrAlias + '</span>$&nbsp;';
     }
 }

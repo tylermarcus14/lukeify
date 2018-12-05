@@ -9,17 +9,19 @@
     "url": "https://github.com/lukeify/lukeify/issues"
   },
   "scripts": {
-    "server:dev": "tsc -w -p app",
+    "server:build:watch": "tsc -w -p app",
     "server:build": "tsc -p app",
     "server:run:dev": "node public/app.js --dev",
     "server:run:prod": "node public/app.js --prod",
     "server:run:cron": "node public/services/CronService.js"
   },
   "dependencies": {
+    "@types/superagent": "^3.8.5",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "superagent": "^4.0.0",
-    "twitter": "^1.7.1"
+    "twitter": "^1.7.1",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "@types/body-parser": "^1.17.0",

@@ -9,7 +9,6 @@
     "url": "https://github.com/lukeify/lukeify/issues"
   },
   "scripts": {
-    "client:ng": "ng",
     "client:start": "ng serve --proxy-config proxy.config.json",
     "client:build": "ng build --prod"
   },

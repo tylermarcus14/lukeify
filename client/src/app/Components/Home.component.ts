@@ -23,7 +23,7 @@ import {animate, AnimationEvent, state, style, transition, trigger} from '@angul
                               (emitHeight)="setHeightOfAboveTheFoldContent($event, 'terminal')"></lukeify-terminal>
         </div>
 
-        <p id="introduction">Hi, I'm Luke Davia—a {{ currentAge }} year old software developer currently residing in
+        <p id="introduction">Hi, I'm Luke Davia—a paragliding, hiking, software developer currently residing in
             Wellington,&nbsp;New&nbsp;Zealand.</p>
 
         <a class="anchor" name="skillset"><h1>Professional Skillset</h1></a>
@@ -332,28 +332,5 @@ export class HomeComponent {
      */
     public setHeightOfAboveTheFoldContent(height: number, component: string): void {
         this.aboveTheFoldContentHeights[component] = height;
-    }
-
-    /**
-     * Returns my current age.
-     *
-     * @returns number My current age.
-     */
-    public get currentAge() : number {
-        const today = new Date();
-        let todayYear = today.getFullYear();
-        let todayMonth = today.getMonth();
-        let todayDay = today.getDate();
-        let age = todayYear - this.dateOfBirth.getFullYear();
-
-        if (todayMonth < this.dateOfBirth.getMonth() - 1) {
-            age--;
-        }
-
-        if (this.dateOfBirth.getMonth() - 1 == todayMonth && todayDay < this.dateOfBirth.getDate()) {
-            age--;
-        }
-
-        return age;
     }
 }

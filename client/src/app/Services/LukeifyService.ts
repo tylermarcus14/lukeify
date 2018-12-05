@@ -3,8 +3,8 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {map} from "rxjs/operators";
 import {Tweet} from "../Interfaces/Tweet";
-import {TerminalCommandResponse} from "../Interfaces/TerminalCommandResponse";
-import {TerminalContextData} from "../Interfaces/TerminalContextData";
+import {TerminalResponse} from "../Interfaces/TerminalResponse";
+import {TerminalState} from "../Interfaces/TerminalState";
 
 /**
  * @class LukeifyService
@@ -40,16 +40,17 @@ export class LukeifyService {
     /**
      * Sends up a command and some state information to the server which returns a terminal snapshot.
      *
-     * @param {TerminalContextData} contextData - The context, i.e. directory from which the command is being executed.
+     * @param {TerminalState} state - The state, i.e. directory from which the command is being executed.
      * @param {string} entry - The entry being executed (i.e. the full user input containing the command and the parameters if any).
+     * @param {any} fs - The current filesystem state the user is interacting with.
      *
      * @returns {Observable<TerminalSnapshot>} The next terminal configuration.
      */
-    public getCommand(history: string, contextData: TerminalContextData, entry: string) : Observable<TerminalCommandResponse> {
-        return this.http.post<TerminalCommandResponse>('/api/command', {
-            history: history,
-            context: contextData,
-            entry: entry
+    public getCommand(state: TerminalState, entry: string, fs: any) : Observable<TerminalResponse> {
+        return this.http.post<TerminalResponse>('/api/terminal/command', {
+            state: state,
+            entry: entry,
+            fs: fs
         });
     }
 
@@ -58,7 +59,7 @@ export class LukeifyService {
      *
      * @returns {Observable<TerminalSnapshot>} The initial terminal configuration.
      */
-    public getInitialTerminalConfiguration() : Observable<TerminalCommandResponse> {
-        return this.http.get<TerminalCommandResponse>('/api/initialterminalconfiguration');
+    public getInitialTerminalConfiguration() : Observable<TerminalResponse> {
+        return this.http.get<TerminalResponse>('/api/terminal');
     }
 }

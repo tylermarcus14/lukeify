@@ -1,8 +1,8 @@
 import {TerminalOption} from "./TerminalOption";
 import {TerminalOperand} from "./TerminalOperand";
 
-export interface TerminalCommandData {
+export interface TerminalData {
     command: string;
-    options: TerminalOption[];
+    options: TerminalOption[]|string[];
     operands: TerminalOperand[];
 }

@@ -31,6 +31,7 @@ if (!process.env.NODE_ENV) {
  */
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '../../client/public/lukeify')));
+app.enable('trust proxy')
 
 /**
  * Gets recent tweets from the stored tweets.json file.
@@ -61,9 +62,9 @@ app.get('/api/instas', (req, res) => {
  *
  * @return {express.Response}
  */
-app.post('/api/command', (req, res) => {
+app.post('/api/terminal/command', async (req, res) => {
     try {
-        const response = commandService.execute(req);
+        const response = await commandService.execute(req);
         return res.status(200).json(response);
     } catch (e) {
         return res.status(500).json({
@@ -77,7 +78,7 @@ app.post('/api/command', (req, res) => {
  *
  * @return {express.Response}
  */
-app.get('/api/initialterminalconfiguration', (req, res) => {
+app.get('/api/terminal', (req, res) => {
     try {
         const response = commandService.initialTerminalConfiguration();
         return res.status(200).json(response);

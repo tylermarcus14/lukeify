@@ -41,7 +41,7 @@ Several scripts are provided for execution for ease of development:
 
 * `client:start`: Runs an Angular Hot Module Reloading environment at localhost:4200.
 * `client:build`: Compiles the frontend using ahead of time compilation and minification to be served by our backend.
-* `server:dev`: Watches for changes and compiles the typescript node server.
+* `server:build:watch`: Watches for changes and compiles the typescript node server.
 * `server:build`: Compiles the typescript node server.
 * `server:run:dev`: Runs the server in a development environment.
 * `server:run:prod`: Runs the server in a production environment.
@@ -53,9 +53,9 @@ Push to GitHub, then from remote repository:
 
 ```
 git clone https://github.com/lukeify/lukeify.git
-npm install
-npm run front:build
-npm run back:build
+yarn install
+yarn run client:build
+yarn run server:build
 ```
 
 Now ensure you have `./server/config.json` configured properly. Follow the exemplar configuration. Then, run `yarn run back:run:prod` using your favorite keep-alive tool, such as forever.js. To run the Twitter & Instagram updating functionality, schedule a cron to call `yarn run back:run:cron` at a frequency of your choosing. 
