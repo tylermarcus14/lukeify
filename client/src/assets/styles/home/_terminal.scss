@@ -161,3 +161,13 @@ input, textarea {
     display: inline-block;
     appearance: none;
 }
+
+@media (prefers-color-scheme: dark) {
+    #terminal-header {
+        background:linear-gradient(180deg, #4b4950 0%, #3c3b41 100%);
+    }
+
+    #terminal {
+        background-color: rgba(#343434, 0.5);
+    }
+}
