@@ -31,27 +31,27 @@ if (!process.env.NODE_ENV) {
  */
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '../../client/public/lukeify')));
-app.enable('trust proxy')
+app.enable('trust proxy');
 
 /**
- * Gets recent tweets from the stored tweets.json file.
+ * Gets recent tweets from the stored cached/tweets.json file.
  *
  * @return {express.Response}
  */
 app.get('/api/tweets', (req, res) => {
-    fs.readFile(path.join(__dirname, '../tweets.json'), 'utf8', (err, data) => {
+    fs.readFile(path.join(__dirname, '../cached/tweets.json'), 'utf8', (err, data) => {
         if (err) return res.status(500).end();
         return res.status(200).json(JSON.parse(data));
     });
 });
 
 /**
- * Gets recent instas from the stored instas.json file.
+ * Gets recent instas from the stored cached/instas.json file.
  *
  * @return {express.Response}
  */
 app.get('/api/instas', (req, res) => {
-    fs.readFile(path.join(__dirname, '../instas.json'), 'utf8', (err, data) => {
+    fs.readFile(path.join(__dirname, '../cached/instas.json'), 'utf8', (err, data) => {
         if (err) return res.status(500).end();
         return res.status(200).json(JSON.parse(data));
     });

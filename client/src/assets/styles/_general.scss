@@ -12,7 +12,6 @@ body {
     margin:0 auto;
     padding:0 1em;
     line-height:1.5;
-    font-size:100%;
     font-family: $inter-ui;
 }
 
@@ -26,10 +25,24 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
     font-size:2em;
+
+    a {
+        background:linear-gradient(135deg, $purple 5%, $blue 80%);
+        -webkit-background-clip: text;
+        color:$slate;
+        transition:color 175ms ease-in-out;
+
+        &:hover {
+            color:transparent !important;
+            transition:color 175ms ease-in-out;
+            cursor:default;
+        }
+    }
 }
 
 h2 {
     font-size:1.25em;
+    margin-bottom:0.33em;
 }
 
 #above-the-fold-content {
@@ -46,12 +59,16 @@ ul {
 }
 
 // inline elements
-a:link, a:visited {
-    color:$sky-dark;
-}
-a:hover {
-    color:$sky;
-}
-a:active {
-    color:$purple;
+a:not(.anchor) {
+    &:link, &:visited {
+        color:$sky-dark;
+    }
+
+    &:hover {
+        color:$sky;
+    }
+
+    &:active {
+        color:$purple;
+    }
 }

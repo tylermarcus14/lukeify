@@ -27,13 +27,13 @@ nav {
         vertical-align:middle;
     }
 
-    a {
+    .header-link {
         padding:0.5em 0;
         text-decoration: none;
-    }
 
-    a:link, a:visited {
-        color:white;
+        &:link, &:visited {
+            color:white;
+        }
     }
 
     img {

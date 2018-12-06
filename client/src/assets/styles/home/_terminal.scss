@@ -35,7 +35,7 @@ lukeify-terminal {
 #terminal-header {
   display:flex;
   align-items:center;
-  background-color:white;
+  background:linear-gradient(180deg, white 0%, #EEE 100%);
   height:1.75em;
   padding:0 0.2em;
   border-top-left-radius:$terminal-border-radius;

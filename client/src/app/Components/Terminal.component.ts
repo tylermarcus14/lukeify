@@ -81,58 +81,66 @@ export class TerminalComponent implements OnInit, AfterViewInit {
      */
     private fs = {
         "type": "dir",
+        "isPwd": false,
         "aliases": ["/"],
         "name": "",
-        "data": [{
-
-            "type": "dir",
-            "name": "home",
-            "data": [{
-
+        "data": [
+            {
                 "type": "dir",
-                "aliases": ["~"],
-                "name": "visitor",
-                "data": [{
-
-                    "type": "dir",
-                    "name": "downloads",
-                    "data": [{
-                        "type": "file",
-                        "name": ""
-                    }]
-                },
-                    {
-                        "type": "file",
-                        "name": "README.md",
-                        "data": "This is a simple JavaScript terminal playground that you can interact with that showcases some of my work."
-                    },
+                "isPwd": false,
+                "name": "home",
+                "data": [
                     {
                         "type": "dir",
-                        "name": "pictures",
-                        "data": []
-                    },
-                    {
-                        "type": "dir",
-                        "name": "documents",
-                        "data": [{
-
-                            "type": "file",
-                            "name": "github.md",
-                            "data": "This is some file"
-                        },
+                        "isPwd": true,
+                        "aliases": ["~"],
+                        "name": "visitor",
+                        "data": [
                             {
-                                "type": "file",
-                                "name": "about.md",
-                                "data": "text"
+                                "type": "dir",
+                                "isPwd": false,
+                                "name": "downloads",
+                                "data": [
+                                    {
+                                        "type": "file",
+                                        "name": "test"
+                                    }
+                                ]
                             },
                             {
                                 "type": "file",
-                                "name": "apps.md",
-                                "data": ""
+                                "name": "README.md",
+                                "data": "This is a simple JavaScript terminal playground that you can interact with that showcases some of my work."
+                            },
+                            {
+                                "type": "dir",
+                                "isPwd": false,
+                                "name": "pictures",
+                                "data": []
+                            },
+                            {
+                                "type": "dir",
+                                "isPwd": false,
+                                "name": "documents",
+                                "data": [
+                                    {
+                                        "type": "file",
+                                        "name": "github.md",
+                                        "data": "This is some file"
+                                    },
+                                    {
+                                        "type": "file",
+                                        "name": "about.md",
+                                        "data": "text"
+                                    },
+                                    {
+                                        "type": "file",
+                                        "name": "apps.md",
+                                        "data": ""
+                                    }]
                             }]
                     }]
             }]
-        }]
     };
 
 

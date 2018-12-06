@@ -1,11 +1,11 @@
 const superagent = require('superagent');
 const uuidv4 = require('uuid/v4');
+const fs = require('fs');
+const path = require('path');
+import {Request} from "express";
 import {TerminalState} from "../interfaces/TerminalState";
 import {TerminalResponse} from "../interfaces/TerminalResponse";
-// import {TerminalOption} from "../interfaces/TerminalOption";
-import {Request} from "express";
 import {TerminalData} from "../interfaces/TerminalData";
-// import {CommandSynopsisRecursiveDescentParser} from "./CommandSynopsisRecursiveDescentParser";
 
 /**
  * Handles user input into the terminal, parsing it, and returning it to the client.
@@ -130,7 +130,7 @@ export class CommandService {
          *
          * @returns {Promise<TerminalResponse>} - The response issued by the terminal for the command given.
          */
-        caffeinate: async function(req: Request, parsedEntry: TerminalData) : Promise<TerminalResponse> {
+        caffeinate: async (req: Request, parsedEntry: TerminalData) : Promise<TerminalResponse> => {
             return {
                 beforeHook: [],
                 afterHook: [],
@@ -217,7 +217,7 @@ export class CommandService {
                 afterHook: ["clear"],
                 response: "",
                 state: req.body.state
-            }
+            };
         },
 
         /**
@@ -280,7 +280,7 @@ export class CommandService {
         },*/
 
         /**
-         * TODO: format time properly, add additions & deletions counts, and cache results on server.
+         * TODO: format time properly, add additions & deletions counts.
          *
          * `git` shall return my last commit and a short statement about my use of github.
          *
@@ -290,23 +290,16 @@ export class CommandService {
          * @returns {Promise<TerminalResponse>} - The response issued by the terminal for the command given.
          */
         git: async function(req: Request, parsedEntry: TerminalData) : Promise<TerminalResponse> {
-            let stmt = '';
+            let githubDetails: any = await new Promise((resolve, reject) => {
+                fs.readFile(path.join(__dirname, "../../cached/github.json"), 'utf8', (err, data) => {
+                    if (err) return reject(err);
+                    return resolve(JSON.parse(data));
+                });
+            });
 
-            try {
-                const eventRes = await superagent.get('https://api.github.com/users/lukeify/events');
-                const pushEvent = eventRes.body.find(event => event.type === "PushEvent");
-
-                const commitRes = await superagent.get(pushEvent.payload.commits[0].url);
-                const commit = commitRes.body;
-
-
-                stmt = `My last commit was <a href="${commit.html_url}" target="_blank">${commit.sha.substr(0, 7)}</a> 
-                        to <a href="https://github.com/${pushEvent.repo.name}" target="_blank">${pushEvent.repo.name}</a> on 
-                        ${pushEvent.created_at}:<br><br>"${commit.commit.message}"<br><br>`;
-
-            } catch (e) {
-                console.log(e);
-            }
+            let stmt = `My last commit was <a href="${githubDetails.commit.url}" target="_blank">${githubDetails.sha.substr(0, 7)}</a> 
+                        to <a href="https://github.com/${githubDetails.repoName}" target="_blank">${githubDetails.repoName}</a> on 
+                        ${githubDetails.createdAt}:<br><br>"${githubDetails.commit.message}"<br><br>`;
 
             stmt += 'You can view some of my work on at <a href="https://github.com/lukeify" target="_blank">https://github.com/lukeify</a>.';
 
@@ -388,21 +381,47 @@ export class CommandService {
         },
 
         /**
-         * TODO: Implement
+         * TODO: Allow for `-l` option, allow for `-a` option.
+         *
          *
          * @param {Request} req - The request object containing the command sent to the server.
          * @param {TerminalData} parsedEntry - The user input, broken into a raw string, the command, and any parameters as an array.
          *
          * @returns {Promise<TerminalResponse>} - The response issued by the terminal for the command given.
          */
-        ls: async function(req: Request, parsedEntry: TerminalData) : Promise<TerminalResponse> {
+        ls: async (req: Request, parsedEntry: TerminalData) : Promise<TerminalResponse> => {
 
+            const pwdFs = this.fsFns.getWorkingDirectory(req.body.fs, req.body.state.pwd);
 
+            let stmt = "";
+
+            // Sort the entries so that directories appear first.
+            pwdFs.data.sort((a,b) => {
+                if ((a.type === "dir" && b.type === "dir") || (a.type !== "dir" && b.type !== "dir")) {
+                    if (a.name < b.name) { return -1; }
+                    if (a.name > b.name) { return 1; }
+                    return 0;
+                }
+
+                if (a.type === "dir" && b.type !== "dir") { return -1; }
+                return 1;
+            });
+
+            // Format each entry into a grid of up to 3 columns.
+            pwdFs.data.forEach((e,i) => {
+                stmt += e.name;
+                for (let j = 0; j < 25 - e.name.length; j++) {
+                    stmt += "&nbsp;";
+                }
+                if ((i+1) % 3 === 0 && i < pwdFs.data.length - 1) {
+                    stmt += "<br/>";
+                }
+            });
 
             return {
                 beforeHook: [],
                 afterHook: [],
-                response: "",
+                response: stmt,
                 state: req.body.state
             };
         },
@@ -641,38 +660,86 @@ export class CommandService {
                 options: options,
                 operands: []
             }
-        },
+        }
+    };
+
+    private fsFns = {
 
         /**
-         * For a given current working directory, and a path that may be relative or absolute, retrieve any data that may be present at that node.
-         * If no data is present, or the node could not be navigated to completely, throw exception.
+         * Retrieves the active node of the virtualised filesystem.
          *
-         * @param {any} fs - The file system being manipulated.
-         * @param {string} pwd -
-         * @param {string} goto -
-         *
-         * @returns {any} A node in the virtualised filesystem
+         * @param rootFs {any}
+         * @param pwd {string}
          */
-        navigateTo: function(fs: any, pwd: string, goto: string) : any {
+        getWorkingDirectory: function(rootFs: any, pwd: string): any {
+            // Split into a path to follow, and
             let segments = pwd.split("/");
-            for (let segment in segments) {
-                if (!fs.hasOwnProperty('data') || !Array.isArray(fs.data)) {
+            segments.shift();
+            let fs = rootFs;
+
+            // Parse the remaining segments
+            for (let segment of segments) {
+                // If we find a entry in the current level that matches the current segment, and is a dir, step down to it
+                fs = fs.data.find(e => e.name === segment && e.type === "dir");
+
+                if (fs === undefined) {
                     throw new Error(`${pwd} is not valid`);
                 }
-                //fs.data.find(d => d.)
             }
+
+            return fs;
         },
 
         /**
-         * For a given cwd, and a goto, return the new pwd. If the goto is invalid, returns the current working directory.
+         * Retrieves the parent of the active node in the virtualised filesystem.
+         *
+         * @param rootFs {any} - The filesystem, from the root, given to the
+         * @param pwd
+         */
+        getParentDirectory: function(rootFs: any, pwd: string): any {
+            let segments = pwd.split("/");
+            segments.pop();
+            return this.getWorkingDirectory(rootFs, segments.join("/"));
+        },
+
+        /**
+         *
          *
          * @param {string} cwd -
-         * @param {string} goto -
          *
          * @return {string}
          */
-        getNewPwd: function(fs: any, pwd: string, goto: string) : string {
+        getNewPwd: function(fs: any) : string {
             return null;
+        },
+
+        /**
+         * Sets the new active working directory of the virtualised filesystem by updating the `isPwd` flag to true for the
+         * new active working directory.
+         *
+         * @param {any} untouchedFs - The file system being manipulated.
+         * @param {string} pwd - The pwd string.
+         * @param {string} goto - The new working directory being asked to navigate towards.
+         *
+         * @returns {any} The original filesystem with the changed pwd.
+         */
+        setWorkingDirectory: function(untouchedFs: any, pwd: string, goto: string) : any {
+            /*let fs = this.getWorkingDirectory(untouchedFs, pwd);
+
+            // attempt to navigate towards the goto
+            let gotoSegments = goto.split("/");
+
+            for (let segment of gotoSegments) {
+                if (segment === ".") {
+                    continue;
+                } else if (segment === "..") {
+                    fs =
+                } else {
+
+                }
+            }
+
+            return fs;*/
         }
     };
 }

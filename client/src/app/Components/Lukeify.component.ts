@@ -10,16 +10,16 @@ import {filter} from 'rxjs/operators';
             <nav>
                 <ul id="nav-left">
                     <li>
-                        <a pageScroll href="#skillset" [pageScrollOffset]="100" routerLink="/" fragment="skillset">Skillset</a>
+                        <a class="header-link" pageScroll href="#skillset" [pageScrollOffset]="100" routerLink="/" fragment="skillset">Skillset</a>
                     </li>
                     <li>
-                        <a pageScroll href="#portfolio" [pageScrollOffset]="100" routerLink="/" fragment="portfolio">Portfolio</a>
+                        <a class="header-link" pageScroll href="#portfolio" [pageScrollOffset]="100" routerLink="/" fragment="portfolio">Portfolio</a>
                     </li>
                     <li>
-                        <a pageScroll href="#get-in-touch" [pageScrollOffset]="100" routerLink="/" fragment="get-in-touch">Get In Touch</a>
+                        <a class="header-link" pageScroll href="#get-in-touch" [pageScrollOffset]="100" routerLink="/" fragment="get-in-touch">Get In Touch</a>
                     </li>
                     <li>
-                        <a href="http://blog.lukeify.com">Blog</a>
+                        <a class="header-link" href="http://blog.lukeify.com">Blog</a>
                     </li>
                 </ul>
                 <ul id="nav-right">
