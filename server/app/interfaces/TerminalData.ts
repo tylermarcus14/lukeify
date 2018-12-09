@@ -3,6 +3,6 @@ import {TerminalOperand} from "./TerminalOperand";
 
 export interface TerminalData {
     command: string;
-    options: TerminalOption[]|string[];
+    options: TerminalOption[]|string[]|string;
     operands: TerminalOperand[];
 }

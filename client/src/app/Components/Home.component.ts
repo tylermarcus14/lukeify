@@ -73,7 +73,7 @@ import {animate, AnimationEvent, state, style, transition, trigger} from '@angul
                     <h2>Membership Management & Onboarding Revamp <span class="small">for NZPPI</span>
                     </h2>
                     <span class="dates">January 2018 – Ongoing</span>
-                    <span class="company-or-github"><a href="https://nzppi.org.nz">Company ⇒</a></span>
+                    <span class="company-or-github"><a href="https://nzppi.org.nz/about">Company ⇒</a></span>
                     <p>Developed & deployed an updated branding & web presence, elucidating the benefits of NZPPI
                      membership through effective use of design and textual information.</p>
                     <ul>

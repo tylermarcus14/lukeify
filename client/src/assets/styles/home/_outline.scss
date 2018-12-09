@@ -11,7 +11,7 @@ $outline-bg-height: 50em;
     transform: skewY(-15deg);
     transform-origin: 0;
 
-    @media (max-width: $terminal-breakpoint) {
+    @media (max-width: $terminal-small-breakpoint) {
         transform:none;
 
         &:after {

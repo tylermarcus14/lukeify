@@ -1,8 +1,9 @@
-const superagent = require('superagent');
 const uuidv4 = require('uuid/v4');
 const fs = require('fs');
 const path = require('path');
+
 import {Request} from "express";
+import {TerminalFilesystem} from "../interfaces/TerminalFilesystem";
 import {TerminalState} from "../interfaces/TerminalState";
 import {TerminalResponse} from "../interfaces/TerminalResponse";
 import {TerminalData} from "../interfaces/TerminalData";
@@ -13,23 +14,38 @@ import {TerminalData} from "../interfaces/TerminalData";
  * @class CommandService
  */
 export class CommandService {
-    private onLoadResponse : string = "Welcome to lukeify.com.<br/><br/>* GitHub:&nbsp;https://github.com/lukeify<br/>* Blog:&nbsp;&nbsp;&nbsp;https://blog.lukeify.com<br/>* Email:&nbsp;&nbsp;lukedavia@icloud.com<br/><br/>";
+    /**
+     * The response to be shown to the user when they load the terminal for the first time.
+     */
+    private onLoadResponse : string = `
+        Welcome to lukeify.com.<br/><br/>
+        * GitHub:&nbsp;https://github.com/lukeify<br/>
+        * Blog:&nbsp;&nbsp;&nbsp;https://blog.lukeify.com<br/>
+        * Email:&nbsp;&nbsp;lukedavia@icloud.com<br/>
+    `;
 
+    /**
+     * The state to utilise when the user loads the terminal for the first time.
+     */
     private onLoadState : TerminalState = {
         user: 'visitor@lukeify.com',
         pwd: "/home/visitor",
         alias: "~"
     };
 
+    /**
+     * List of commands available to the user.
+     */
     private commands = {
         caffeinate: ["-t"],
         //cal: [""],
         //cat: ["file ..."],
-        //cd: ["[dir]"],
+        cd: ["[dir]"],
         clear: [""],
         date: [""],
+        dotnet: [""],
         //exit: [""],
-        //help: [""],
+        help: [""],
         //file: ["[file]"],
         git: [""],
         //id: [""],
@@ -39,14 +55,16 @@ export class CommandService {
         man: ["name"],
         //mkdir: ["dir"],
         //mv: ["[dir or file] [dir or file]"],
-        //node: ["[-v | --version]"],
+        node: ["[-v | --version]"],
+        ng: [""],
         npm: [""],
-        //php: [""],
+        php: [""],
         pwd: [""],
-        //python: [""],
-        //python3: [""],
+        python: [""],
+        python3: [""],
         //rm: ["[-rf] [--no-preserve-root] file ..."],
         reset: [""],
+        rustc: [""],
         //tail: ["file ..."],
         uname: [""],
         uuidgen: [""],
@@ -86,19 +104,16 @@ export class CommandService {
 
         // If the command is available to the user.
         if (this.commands.hasOwnProperty(parsedEntry.command)) {
-
             // Make a dynamic call to the function hosting the command, passing in the request object, the request context object, and the input object.
+            // Then update the response to build a response
             output = await this.commandFns[parsedEntry.command](req, parsedEntry);
 
-            // Update the response to build a response
-            output.response = this.helperFns.buildResult(req.body.state, req.body.entry, output.response);
-
-        // If what was entered was a blank entry, just display the
+        // If what was entered was a blank entry, just display the previous state with no response.
         } else if (parsedEntry.command === "") {
             output = {
                 beforeHook: [],
                 afterHook: [],
-                response: this.helperFns.buildResult(req.body.state, req.body.entry),
+                response: null,
                 state: req.body.state
             };
 
@@ -107,7 +122,7 @@ export class CommandService {
             output = {
                 beforeHook: [],
                 afterHook: [],
-                response: this.helperFns.buildResult(req.body.state, req.body.entry, parsedEntry.command + ": command not found"),
+                response: parsedEntry.command + ": command not found",
                 state: req.body.state
             };
         }
@@ -163,19 +178,30 @@ export class CommandService {
         },
 
         /**
-         * TODO: Implement
+         * TODO:
+         * 1. Correctly handle trying to cd .. above /.
+         * 2. Handle `/` entries at the end of gotos.
+         * 3. Handle no such file or directory.
+         * 4. Handle not a directory.
+         * 5. Handle ~
+         * 6. Handle blank.
+         * 7. Handle `/`.
          *
          * @param {Request} req - The request object containing the command sent to the server.
          * @param {TerminalData} parsedEntry - The user input, broken into a raw string, the command, and any parameters as an array.
          *
          * @returns {Promise<TerminalResponse>} - The response issued by the terminal for the command given.
          */
-        cd: async function(req: Request, parsedEntry: TerminalData) : Promise<TerminalResponse> {
+        cd: async (req: Request, parsedEntry: TerminalData) : Promise<TerminalResponse> => {
+            const newFs         = this.fsFns.setWorkingDirectory(req.body.fs, parsedEntry.options[0] as string);
+            req.body.state      = {...req.body.state, ...this.fsFns.getPwdAndAlias(newFs)};
+
             return {
                 beforeHook: [],
                 afterHook: [],
-                response: "",
-                state: req.body.state
+                response: null,
+                state: req.body.state,
+                fs: newFs
             }
         },
 
@@ -260,6 +286,18 @@ export class CommandService {
             };
         },
 
+        dotnet: function(req: Request, parsedEntry: TerminalData): TerminalResponse {
+            const stmt = "";
+
+            return {
+                beforeHook: [],
+                afterHook: [],
+                response: stmt,
+                state: req.body.state
+            }
+        },
+
+
         /**
          * Feigns an `exit`. On the frontend of the application, show the response, before removing the terminal.
          * TODO: Implement
@@ -301,7 +339,7 @@ export class CommandService {
                         to <a href="https://github.com/${githubDetails.repoName}" target="_blank">${githubDetails.repoName}</a> on 
                         ${githubDetails.createdAt}:<br><br>"${githubDetails.commit.message}"<br><br>`;
 
-            stmt += 'You can view some of my work on at <a href="https://github.com/lukeify" target="_blank">https://github.com/lukeify</a>.';
+            stmt += 'You can view some of my work at <a href="https://github.com/lukeify" target="_blank">https://github.com/lukeify</a>.';
 
             return {
                 beforeHook: [],
@@ -320,10 +358,21 @@ export class CommandService {
          * @returns {Promise<TerminalResponse>} - The response issued by the terminal for the command given.
          */
         help: async function(req: Request, parsedEntry: TerminalData) : Promise<TerminalResponse> {
+            const stmt = `
+                Welcome to lukeify.com. This terminal emulator was created to demonstrate my work in a unique & interesting way. 
+                Only basic commands are implemented—and many quality of life additions you've probably come to expect 
+                in your own cli environment aren't available here.<br/><br/>
+                
+                That being said, try to navigate around the virtual filesystem I've created with \`ls\` and \`cd\`. Commands
+                such as \`git\`, \`php\`, and \`dotnet\` show what I've built and how I'm using these tools.<br/><br/>
+                
+                There's some other cool commands implemented also; but they're up to you to find. Have fun! 🚀
+            `
+
             return {
                 beforeHook: [],
                 afterHook: [],
-                response: "",
+                response: stmt,
                 state: req.body.state
             };
         },
@@ -391,12 +440,12 @@ export class CommandService {
          */
         ls: async (req: Request, parsedEntry: TerminalData) : Promise<TerminalResponse> => {
 
-            const pwdFs = this.fsFns.getWorkingDirectory(req.body.fs, req.body.state.pwd);
+            const pwdFs = this.fsFns.getWorkingDirectory(req.body.fs);
 
             let stmt = "";
 
             // Sort the entries so that directories appear first.
-            pwdFs.data.sort((a,b) => {
+            (<TerminalFilesystem[]>pwdFs.data).sort((a,b) => {
                 if ((a.type === "dir" && b.type === "dir") || (a.type !== "dir" && b.type !== "dir")) {
                     if (a.name < b.name) { return -1; }
                     if (a.name > b.name) { return 1; }
@@ -408,7 +457,7 @@ export class CommandService {
             });
 
             // Format each entry into a grid of up to 3 columns.
-            pwdFs.data.forEach((e,i) => {
+            (<TerminalFilesystem[]>pwdFs.data).forEach((e,i) => {
                 stmt += e.name;
                 for (let j = 0; j < 25 - e.name.length; j++) {
                     stmt += "&nbsp;";
@@ -453,20 +502,22 @@ export class CommandService {
          *
          * @returns {Promise<TerminalResponse>} - The response issued by the terminal for the command given.
          */
-        /* node: function(req: Request, parsedEntry: TerminalData) : TerminalResponse {
+        node: function(req: Request, parsedEntry: TerminalData) : TerminalResponse {
             let stmt;
-            if (input.options.includes("-v")) {
-                stmt = "v8.9.0";
+            if (false /*parsedEntry.options.includes("-v")*/) {
+                stmt = "v11.3.0";
             } else {
-                stmt = "Scroll down the page for a list of projects I've implemented in Node. If you're interested in my expertise in working on a project that runs on Node, give me a holler!";
+                stmt = `I ❤️ Node! Some of the projects where I've used Node include:<br/><br/>
+                        * This website!<br/>
+                        *`;
             }
             return {
                 beforeHook: [],
                 afterHook: [],
                 response: stmt,
-                context: context
+                state: req.body.state
             }
-        },*/
+        },
 
         /**
          * No discussion about NPM is complete without a reference to Yarn, right?
@@ -483,6 +534,24 @@ export class CommandService {
                 response: `I personally prefer <a href="https://yarnpkg.com">yarnpkg</a>! 🐱`,
                 state: req.body.state
             }
+        },
+
+        /**
+         * Display information about my work in PHP.
+         *
+         * @param {Request} req - The request object containing the command sent to the server.
+         * @param {TerminalData} parsedEntry - The user input, broken into a raw string, the command, and any parameters as an array.
+         *
+         * @returns {Promise<TerminalResponse>} - The response issued by the terminal for the command given.
+         */
+        php: async function(req: Request, parsedEntry: TerminalData) : Promise<TerminalResponse> {
+            return {
+                beforeHook: [],
+                afterHook: [],
+                response: `spacexstats, my first large personal project, utilised the Laravel 4 framework running PHP5.5. 
+                Since then, PHP has come a long way, and I've used to build a few API wrappers, and also professionally`,
+                state: req.body.state
+            };
         },
 
         /**
@@ -615,24 +684,6 @@ export class CommandService {
 
     private helperFns = {
         /**
-         *
-         * @param {TerminalState} state
-         * @param {TerminalData} input
-         * @param {string|null} toAppend
-         *
-         * @returns {string}
-         */
-        buildResult: function(state: TerminalState, input, toAppend = null) : string {
-            let trimmedDirOrAlias = state.alias !== null ? state.alias : state.pwd.split("/").pop();
-
-            let result = `<span class="term-color term-sky">${state.user}</span>:<span class="term-color term-red">${trimmedDirOrAlias}</span>$&nbsp;${input}<br/>`;
-            if (toAppend) {
-                result += `${toAppend}<br/>`;
-            }
-            return result;
-        },
-
-        /**
          * For the user input, trip the data to remove any whitespace on either side. Begin by pulling off the command, defined
          * as the first element that can be split off on whitespace. From there, break any remaining values into options and parameters.
          *
@@ -666,80 +717,147 @@ export class CommandService {
     private fsFns = {
 
         /**
-         * Retrieves the active node of the virtualised filesystem.
+         * Retrieves the active node of the virtualised filesystem by iterating down to it and returning it. Because it is
+         * passed by reference, alterations to the returned `fs` will also affect `rootFs`, as intended.
          *
-         * @param rootFs {any}
-         * @param pwd {string}
+         * @param rootFs {TerminalFilesystem} - The virtualised filesystem from the root.
+         *
+         * @return {TerminalFilesystem} A subset of the filesystem from the current working directory.
          */
-        getWorkingDirectory: function(rootFs: any, pwd: string): any {
-            // Split into a path to follow, and
-            let segments = pwd.split("/");
-            segments.shift();
-            let fs = rootFs;
+        getWorkingDirectory: function(rootFs: TerminalFilesystem): TerminalFilesystem {
+            let setOfNodes = [];
+            setOfNodes.push(rootFs);
 
-            // Parse the remaining segments
-            for (let segment of segments) {
-                // If we find a entry in the current level that matches the current segment, and is a dir, step down to it
-                fs = fs.data.find(e => e.name === segment && e.type === "dir");
+            while (setOfNodes.length > 0) {
+                let fsAtNode = setOfNodes.shift();
 
-                if (fs === undefined) {
-                    throw new Error(`${pwd} is not valid`);
+                if (fsAtNode.isPwd) {
+                    return fsAtNode;
                 }
+
+                let fsChildNodes = (<TerminalFilesystem[]>fsAtNode.data).filter(e => e.type === "dir");
+                setOfNodes = setOfNodes.concat(fsChildNodes);
             }
 
-            return fs;
+            throw new Error(`Working directory not found.`);
         },
 
         /**
-         * Retrieves the parent of the active node in the virtualised filesystem.
+         * Retrieves the parent of the active node in the virtualised filesystem by iterating down to it and returning it.
+         * Because it is passed by reference, alterations to the returned `fs` will also affect `rootFs`, as intended.
          *
-         * @param rootFs {any} - The filesystem, from the root, given to the
-         * @param pwd
+         * As there can be no parent directory for root (`/`), null is returned in this case.
+         *
+         * @param rootFs {TerminalFilesystem} - The virtualised filesystem from the root.
+         *
+         * @returns {TerminalFilesystem|null} A subset of the filesystem from the parent working directory.
          */
-        getParentDirectory: function(rootFs: any, pwd: string): any {
-            let segments = pwd.split("/");
-            segments.pop();
-            return this.getWorkingDirectory(rootFs, segments.join("/"));
+        getParentDirectory: function(rootFs: TerminalFilesystem): TerminalFilesystem|null {
+            // If the root of the filesystem is the pwd, return null.
+            if (rootFs.isPwd) {
+                return null;
+            }
+
+            let setOfNodes = [];
+            setOfNodes.push(rootFs);
+
+            while (setOfNodes.length > 0) {
+                let fsAtNode = setOfNodes.shift();
+
+                let fsChildNodes : TerminalFilesystem[] = (<TerminalFilesystem[]>fsAtNode.data).filter(e => e.type === "dir");
+
+                for (let fsChildNode of fsChildNodes) {
+                    if (fsChildNode.isPwd) {
+                        return fsAtNode;
+                    }
+                }
+                setOfNodes = setOfNodes.concat(fsChildNodes);
+            }
+
+            throw new Error(`Parent directory not found.`);
         },
 
         /**
+         * Retrieves the current pwd and alias, given a TerminalFilesystem.
          *
+         * @param {TerminalFilesystem} rootFs - The file system to return the pwd and alias for.
          *
-         * @param {string} cwd -
-         *
-         * @return {string}
+         * @return {{ pwd: string; alias: string;}}
          */
-        getNewPwd: function(fs: any) : string {
-            return null;
+        getPwdAndAlias: function(rootFs: TerminalFilesystem) : { pwd: string; alias: string;} {
+            let setOfNodes = [];
+            setOfNodes.push({
+                path: "",
+                alias: rootFs.aliases[0],
+                fs: rootFs
+            });
+
+            while (setOfNodes.length > 0) {
+                let fsNodeData = setOfNodes.shift();
+
+                if (fsNodeData.fs.isPwd) {
+                    return {
+                        pwd: fsNodeData.path,
+                        alias: fsNodeData.alias
+                    }
+                }
+
+                let fsChildNodes = (<TerminalFilesystem[]>fsNodeData.fs.data).filter(e => e.type === "dir").map(e => {
+                    return {
+                        path: fsNodeData.path + "/" + e.name,
+                        alias: e.aliases ? e.aliases[0] : null,
+                        fs: e
+                    };
+                });
+                setOfNodes = setOfNodes.concat(fsChildNodes);
+            }
+
+            throw new Error(`Pwd & alias not found.`);
         },
 
         /**
          * Sets the new active working directory of the virtualised filesystem by updating the `isPwd` flag to true for the
          * new active working directory.
          *
-         * @param {any} untouchedFs - The file system being manipulated.
-         * @param {string} pwd - The pwd string.
+         * @param {TerminalFilesystem} rootFs - The file system being manipulated.
          * @param {string} goto - The new working directory being asked to navigate towards.
          *
-         * @returns {any} The original filesystem with the changed pwd.
+         * @returns {TerminalFilesystem} The original filesystem with the changed pwd.
          */
-        setWorkingDirectory: function(untouchedFs: any, pwd: string, goto: string) : any {
-            /*let fs = this.getWorkingDirectory(untouchedFs, pwd);
+        setWorkingDirectory: function(rootFs: TerminalFilesystem, goto: string) : TerminalFilesystem {
+            let fs;
 
             // attempt to navigate towards the goto
             let gotoSegments = goto.split("/");
 
+            // foreach segment of the goto...
             for (let segment of gotoSegments) {
+                // referring to the current dir, do nothing
                 if (segment === ".") {
                     continue;
-                } else if (segment === "..") {
-                    fs =
-                } else {
 
+                // attempt navigate up a directory
+                } else if (segment === "..") {
+                    // Unset the current working directory
+                    let workingFs = this.getWorkingDirectory(rootFs);
+                    let parentFs = this.getParentDirectory(rootFs);
+                    workingFs.isPwd = false;
+                    parentFs.isPwd = true;
+
+                // attempt to navigate down a directory. If the attempt fails, revert.
+                } else {
+                    try {
+                        fs = this.getWorkingDirectory(rootFs);
+                        fs.isPwd = false;
+                        fs = fs.data.find(e => e.name === segment && e.type === "dir");
+                        fs.isPwd = true;
+
+                    } catch (e) {
+
+                    }
                 }
             }
-
-            return fs;*/
+            return rootFs;
         }
     };
 }

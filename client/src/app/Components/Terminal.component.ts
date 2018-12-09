@@ -28,6 +28,7 @@ import {TerminalState} from "../Interfaces/TerminalState";
                 <span #terminalHistory id="terminal-history"></span>
                 <span #terminalState id="terminal-state"></span>
                 <input #terminalEntry id="terminal-entry" type="text" autocomplete="off" spellcheck="false"
+                       [placeholder]="terminalPlaceholder"
                        [(ngModel)]="entryStack[entryStackIndex][entryStackType]"
                        (keyup)="onKeyUp($event)">
             </div>
@@ -61,20 +62,7 @@ export class TerminalComponent implements OnInit, AfterViewInit {
      */
     public terminalHasFocus: boolean = true;
     public terminalStateData: TerminalState;
-
-    /**
-     * A set of hooks that can be run by the terminal playground before and after history has been cleared.
-     */
-    private hooks = {
-        clear: async () => {
-            this.terminalHistory = "";
-            return;
-        },
-        reset: async() => {
-            await this.ngOnInit();
-            return;
-        }
-    };
+    public terminalPlaceholder: string = "Try \`help\` to get started.";
 
     /**
      *
@@ -143,40 +131,20 @@ export class TerminalComponent implements OnInit, AfterViewInit {
             }]
     };
 
-
     /**
-     *
+     * A set of hooks that can be run by the terminal playground before and after history has been cleared.
      */
-    public get terminalHistory() : string {
-        return this._terminalHistory.nativeElement.innerHTML;
-    }
-
-    /**
-     *
-     * @param {string} data
-     */
-    public set terminalHistory(data: string) {
-        this._terminalHistory.nativeElement.innerHTML = data;
-    }
-
-    /**
-     *
-     */
-    public get terminalState() : string {
-        return this._terminalState.nativeElement.innerHTML;
-    }
-
-    /**
-     * Sets the current terminal state, also updating the width of the input element.
-     *
-     * @setter
-     *
-     * @param {string} data
-     */
-    public set terminalState(data: string) {
-        this._terminalState.nativeElement.innerHTML = data;
-        this._terminalState.nativeElement.style.width = this._terminalState.nativeElement.width;
-    }
+    private hooks = {
+        clear: async () => {
+            this._clearTerminalHistory();
+            return;
+        },
+        reset: async() => {
+            this._clearTerminalHistory();
+            await this.ngOnInit();
+            return;
+        }
+    };
 
     /**
      * Constructor.
@@ -190,10 +158,10 @@ export class TerminalComponent implements OnInit, AfterViewInit {
      * When the component is initialized, fetch the initial terminal configuration from our server.
      */
     public ngOnInit(): void {
-        this.lukeifyService.getInitialTerminalConfiguration().subscribe((response: TerminalResponse) => {
-            this.terminalHistory = response.response;
-            this.terminalState = this.asHumanReadableTerminalState(response.state);
-            this.terminalStateData = response.state;
+        this.lukeifyService.getInitialTerminalConfiguration().subscribe((res: TerminalResponse) => {
+            this._appendTerminalResponse(res.response);
+            this._setTerminalState(res.state);
+            this.terminalStateData = res.state;
         });
     }
 
@@ -217,7 +185,7 @@ export class TerminalComponent implements OnInit, AfterViewInit {
 
         fromEvent(document, 'click').pipe(
             first()
-        ).subscribe(event => {
+        ).subscribe(() => {
             this.terminalHasFocus = false;
         });
     }
@@ -243,18 +211,25 @@ export class TerminalComponent implements OnInit, AfterViewInit {
             const entry = this.entryStack[this.entryStackIndex].original;
 
             // Make a request, passing through the terminal
-            this.lukeifyService.getCommand(this.terminalStateData, entry, this.fs).subscribe((response: TerminalResponse) => {
+            this.lukeifyService.getCommand(this.terminalStateData, entry, this.fs).subscribe((res: TerminalResponse) => {
+
+                // Unset the terminal placeholder.
+                this.terminalPlaceholder = "";
 
                 // Before the history of the client-side terminal is cleared, execute any hooks.
-                for (let hook of response.beforeHook) {
+                for (let hook of res.beforeHook) {
                     this.hooks[hook]();
                 }
 
-                // Append the response from the server to the terminal history.
-                this.terminalHistory += response.response;
+                // Append the previous terminal entry, including user entered text, into the terminal history
+                // Then, append the response from the server.
+                this._appendLastTerminalEntry(this.terminalStateData, this.entryStack[this.entryStackIndex][this.entryStackType]);
+                if (res.response) {
+                    this._appendTerminalResponse(res.response);
+                }
 
                 // After the history of the client-size terminal is cleared, execute any hooks.
-                for (let hook of response.afterHook) {
+                for (let hook of res.afterHook) {
                     this.hooks[hook]();
                 }
 
@@ -264,12 +239,12 @@ export class TerminalComponent implements OnInit, AfterViewInit {
                 this.entryStackIndex++;
 
                 // Update the terminal state from the server's response
-                this.terminalStateData = response.state;
-                this.terminalState = this.asHumanReadableTerminalState(response.state);
+                this.terminalStateData = res.state;
+                this._setTerminalState(this.terminalStateData);
 
                 // Update the filesystem from the server's response, if it exists
-                if (response.hasOwnProperty('fs')) {
-                    this.fs = response.fs;
+                if (res.hasOwnProperty('fs')) {
+                    this.fs = res.fs;
                 }
 
                 // Make sure the new input is always in view
@@ -292,18 +267,58 @@ export class TerminalComponent implements OnInit, AfterViewInit {
 
     /**
      *
-     *
-     * @param {TerminalState} terminalState
-     *
-     * @returns {string}
+     * @private
      */
-    private asHumanReadableTerminalState(terminalState: TerminalState) : string {
+    public _clearTerminalHistory() {
+        this._terminalHistory.nativeElement.innerHTML = "";
+    }
+
+    /**
+     *
+     * @param state
+     * @param userEnteredEntry
+     * @private
+     */
+    public _appendLastTerminalEntry(state: TerminalState, userEnteredEntry: string): void {
+        this._terminalHistory.nativeElement.innerHTML += this._createTerminalEntry(state) + userEnteredEntry + "<br/>";
+    }
+
+    /**
+     *
+     * @param response
+     * @private
+     */
+    public _appendTerminalResponse(response: string): void {
+        this._terminalHistory.nativeElement.innerHTML += response + "<br/>";
+    }
+
+    /**
+     * Sets the current terminal state, also updating the width of the input element.
+     *
+     * @setter
+     *
+     * @param {TerminalState} state
+     */
+    public _setTerminalState(state: TerminalState): void {
+        this._terminalState.nativeElement.innerHTML = this._createTerminalEntry(state);
+        this._terminalState.nativeElement.style.width = this._terminalState.nativeElement.width;
+    }
+
+    /**
+     *
+     * @param terminalState
+     * @param response
+     */
+    private _createTerminalEntry(terminalState: TerminalState, response: string = null): string {
+        if (!terminalState) {
+            return null;
+        }
         let trimmedDirOrAlias = terminalState.pwd.split("/").pop();
 
         if (terminalState.alias !== null) {
             trimmedDirOrAlias = terminalState.alias;
         }
 
-        return '<span class="term-color term-sky">' + terminalState.user + '</span>:<span class="term-color term-red">' + trimmedDirOrAlias + '</span>$&nbsp;';
+        return `<span class="term-color term-sky">${terminalState.user}</span>:<span class="term-color term-purple">${trimmedDirOrAlias}</span>$&nbsp;`;
     }
 }

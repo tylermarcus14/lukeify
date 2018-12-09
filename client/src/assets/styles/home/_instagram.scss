@@ -11,7 +11,7 @@ lukeify-instagram {
     max-width:60%;
     margin:0 auto;
 
-    @media (max-width: $terminal-breakpoint) {
+    @media (max-width: $terminal-small-breakpoint) {
       max-width:70%;
     }
 

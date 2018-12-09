@@ -1,5 +1,6 @@
 $terminal-border-radius:5px;
-$terminal-width:53em;
+$terminal-normal-width:53em;
+$terminal-small-width:95%;
 $terminal-height:30em;
 $terminal-box-shadow-vertical-displacement:2em;
 $terminal-box-shadow-blur-radius:3.125em;
@@ -19,14 +20,8 @@ lukeify-terminal {
   margin: 8em auto;
 }
 
-@media (max-width: $terminal-breakpoint) {
-  lukeify-terminal {
-    display: none;
-  }
-}
-
 #terminal-container {
-  width:$terminal-width;
+  width:$terminal-normal-width;
   margin:4em auto 6em auto;
   box-shadow:0 $terminal-box-shadow-vertical-displacement $terminal-box-shadow-blur-radius $terminal-box-shadow-spread-radius rgba(black, 0.4);
   border-radius:$terminal-border-radius;
@@ -117,8 +112,8 @@ lukeify-terminal {
       color:$sky;
     }
 
-    &.term-color.term-red {
-      color:$purple;
+    &.term-color.term-purple {
+      color:lighten($purple, 10%);
     }
   }
 }
@@ -169,5 +164,18 @@ input, textarea {
 
     #terminal {
         background-color: rgba(#343434, 0.5);
+    }
+}
+
+@media (max-width: $terminal-small-breakpoint) {
+    #terminal-container {
+        width:$terminal-small-width;
+        box-shadow:none;
+    }
+}
+
+@media (max-width: $terminal-hide-breakpoint) {
+    lukeify-terminal {
+        display: none;
     }
 }
