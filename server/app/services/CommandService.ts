@@ -39,7 +39,7 @@ export class CommandService {
     private commands = {
         caffeinate: ["-t"],
         //cal: [""],
-        //cat: ["file ..."],
+        cat: ["file"],
         cd: ["[dir]"],
         clear: [""],
         date: [""],
@@ -53,6 +53,7 @@ export class CommandService {
         //logout: [""],
         ls: [""],
         man: ["name"],
+        mail: [""],
         //mkdir: ["dir"],
         //mv: ["[dir or file] [dir or file]"],
         node: ["[-v | --version]"],
@@ -156,36 +157,44 @@ export class CommandService {
 
         /**
          * Displays the output of a file or files to the terminal.
-         * TODO: Implement
+         * TODO: Handle stripping last slash off directory
          *
          * @param {Request} req - The request object containing the command sent to the server.
          * @param {TerminalData} parsedEntry - The user input, broken into a raw string, the command, and any parameters as an array.
          *
          * @returns {Promise<TerminalResponse>} - The response issued by the terminal for the command given.
          */
-        cat: async function(req: Request, parsedEntry: TerminalData) : Promise<TerminalResponse|void> {
+        cat: async (req: Request, parsedEntry: TerminalData) : Promise<TerminalResponse> => {
 
-            /*let stmts = [];
-            input.operands.forEach(param => {
-                stmts.push("cat: " + param  + ": No such file or directory");
-            });
+            const fileName = parsedEntry.options[0];
+            console.log(parsedEntry);
+            const workingDirectory = this.fsFns.getWorkingDirectory(req.body.fs);
+            const potentialFile = (workingDirectory.data as TerminalFilesystem[]).find(e => e.name === fileName);
+            let stmt;
+
+            if (potentialFile == null) {
+                stmt = `cat: ${fileName}: No such file or directory`;
+
+            } else if (potentialFile.type === "dir") {
+                stmt = `cat: ${fileName}: Is a directory`;
+
+            } else if (potentialFile.type === "file") {
+                stmt = potentialFile.data;
+            }
+
             return {
                 beforeHook: [],
                 afterHook: [],
                 response: stmt,
                 state: req.body.state
-            }*/
+            }
         },
 
         /**
          * TODO:
-         * 1. Correctly handle trying to cd .. above /.
-         * 2. Handle `/` entries at the end of gotos.
-         * 3. Handle no such file or directory.
-         * 4. Handle not a directory.
-         * 5. Handle ~
-         * 6. Handle blank.
-         * 7. Handle `/`.
+         * 5. Handle ~ (go home).
+         * 6. Handle blank (go home).
+         * 7. Handle `/` (go to root).
          *
          * @param {Request} req - The request object containing the command sent to the server.
          * @param {TerminalData} parsedEntry - The user input, broken into a raw string, the command, and any parameters as an array.
@@ -193,16 +202,22 @@ export class CommandService {
          * @returns {Promise<TerminalResponse>} - The response issued by the terminal for the command given.
          */
         cd: async (req: Request, parsedEntry: TerminalData) : Promise<TerminalResponse> => {
-            const newFs         = this.fsFns.setWorkingDirectory(req.body.fs, parsedEntry.options[0] as string);
-            req.body.state      = {...req.body.state, ...this.fsFns.getPwdAndAlias(newFs)};
 
-            return {
+            let response : TerminalResponse = {
                 beforeHook: [],
                 afterHook: [],
                 response: null,
-                state: req.body.state,
-                fs: newFs
+                state: req.body.state
+            };
+
+            try {
+                response.fs         = this.fsFns.setWorkingDirectory(req.body.fs, parsedEntry.options[0] as string);
+                response.state      = {...req.body.state, ...this.fsFns.getPwdAndAlias(response.fs)};
+            } catch (e) {
+                response.response = "cd: " + e.message;
             }
+
+            return response;
         },
 
         /**
@@ -556,6 +571,7 @@ export class CommandService {
 
         /**
          * Display the current working directory.
+         * TODO: 1. Handle pwd at `/`.
          *
          * @param {Request} req - The request object containing the command sent to the server.
          * @param {TerminalData} parsedEntry - The user input, broken into a raw string, the command, and any parameters as an array.
@@ -573,6 +589,7 @@ export class CommandService {
 
         /**
          * Resets the terminal history and context to what is shown on page load.
+         * TODO: keep pwd on reset
          *
          * @param {Request} req - The request object containing the command sent to the server.
          * @param {TerminalState} state - The context of the request being made: the user making the request and the current working directory.
@@ -778,6 +795,23 @@ export class CommandService {
         },
 
         /**
+         * Retrieves a directory by pwd.
+         *
+         * @param rootFs {TerminalFilesystem} - The virtualised filesystem from the root.
+         *
+         * @returns {TerminalFilesystem|null} A subset of the filesystem from the pwd, or null if not found.
+         */
+        getDirectoryByPwd: function(rootFs: TerminalFilesystem, pwd: string) : TerminalFilesystem|null {
+            let fs = rootFs;
+
+            while (fs.name !== "visitor") {
+                fs = fs
+            }
+
+            return null;
+        },
+
+        /**
          * Retrieves the current pwd and alias, given a TerminalFilesystem.
          *
          * @param {TerminalFilesystem} rootFs - The file system to return the pwd and alias for.
@@ -827,8 +861,8 @@ export class CommandService {
         setWorkingDirectory: function(rootFs: TerminalFilesystem, goto: string) : TerminalFilesystem {
             let fs;
 
-            // attempt to navigate towards the goto
-            let gotoSegments = goto.split("/");
+            // attempt to navigate towards the goto. If the goto ends with a `/`, split that off first.
+            let gotoSegments = goto.endsWith("/") ? goto.substring(0, goto.length - 1).split("/") : goto.split("/");
 
             // foreach segment of the goto...
             for (let segment of gotoSegments) {
@@ -841,23 +875,44 @@ export class CommandService {
                     // Unset the current working directory
                     let workingFs = this.getWorkingDirectory(rootFs);
                     let parentFs = this.getParentDirectory(rootFs);
-                    workingFs.isPwd = false;
-                    parentFs.isPwd = true;
+
+                    if (parentFs !== null) {
+                        workingFs.isPwd = false;
+                        parentFs.isPwd = true;
+                    } else {
+                        continue;
+                    }
+
+                // navigate home
+                } else if (segment === "~") {
+                    continue;
+
+                // navigate to root
+                } else if (segment === "") {
+
 
                 // attempt to navigate down a directory. If the attempt fails, revert.
                 } else {
-                    try {
-                        fs = this.getWorkingDirectory(rootFs);
-                        fs.isPwd = false;
-                        fs = fs.data.find(e => e.name === segment && e.type === "dir");
-                        fs.isPwd = true;
+                    fs = this.getWorkingDirectory(rootFs);
+                    fs.isPwd = false;
+                    const potentialNewDir = fs.data.find(e => e.name === segment);
 
-                    } catch (e) {
-
+                    // Catch if the file or dir does not exist
+                    if (potentialNewDir == null) {
+                        throw new Error(goto + ": No such file or directory");
                     }
+
+                    // Catch if the type is not a dir
+                    if (potentialNewDir.type !== "dir") {
+                        throw new Error(goto + ": Not a directory");
+                    }
+
+                    potentialNewDir.isPwd = true;
                 }
             }
             return rootFs;
-        }
+        },
+
+        getFileInWorkingDirectory() {}
     };
 }
