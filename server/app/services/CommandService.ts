@@ -66,6 +66,7 @@ export class CommandService {
         //rm: ["[-rf] [--no-preserve-root] file ..."],
         reset: [""],
         rustc: [""],
+        ssh: [""],
         //tail: ["file ..."],
         uname: [""],
         uuidgen: [""],
@@ -624,6 +625,23 @@ export class CommandService {
             };
         },
 
+        /**
+         * Returns my SSH public key.
+         *
+         * @param {Request} req - The request object containing the command sent to the server.
+         * @param {TerminalState} state - The context of the request being made: the user making the request and the current working directory.
+         * @param {TerminalData} parsedEntry - The user input, broken into a raw string, the command, and any parameters as an array.
+         *
+         * @returns {Promise<TerminalResponse>} - The response issued by the terminal for the command given.
+         */
+        ssh: async function(req: Request, parsedEntry: TerminalData): Promise<TerminalResponse> {
+            return {
+                beforeHook: [],
+                afterHook: [],
+                response: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAEAQC2WmVEWDHV7lZiQUNNSQuGIiKWzX/LR6e7nTa+slRik3LitIG2he9Iv02ymd9zbqGwxrszcHqM/tJVARFpW6ibzM7gM1nyweFWYW6sHtJMw0YavSlg3bGjz9GnYLay4Gnx57c+FDOtI6NIFfikcISRDqMxdsvoj4f6Ib722Jtth+863QfglF+ZF68N8yvDxH+hxE5DJqktVJ1OClnM2SJ+DEjvnGnBalW1INbsbIcJj3MlTV0aDHy6MW29V4ckSwFaC0TOwgNCBsOPjzaqji1httWgnvMVdkS1REGRKvRALuTvhZEbFN1w/DexnwRLFJreYMbkkAotHnInQIJafaspYv9FIvpGZvCWoLXX4euEhg4bNidCAnqlX52NppMUvXhTE6jNE6fMrH48wqb4utbXX3mkAF0s4xeViXDfEyf5nJH01NDnFACvoXer32y3dw4/0h2hVGsiNE+n19guOYuzkWdGqgcD6W66UB7m2xgTxxTZ6DE6x33Lw55C55217yqXMNQEmUwZvk5028iI1cJ4MAmzdTkg8TLbM9J3A1ZPJfFRiV5/PYWdQdYrz1MMh1kp7CRXPyE5IQHM8Wr7afIvZG68F9BIHcsJkcKCCu8DIVKqmpntmVjOW+6DDWJhQUCOU0/6pHKEuLb7L6oROmG36EcNCGYKVwxRp2pqNiHhuX6cpu41i7dPqXPLK5J3XcOD1qsWPZz1Dh6gaUxkkisBisPkk5cUT4Zlq9HMZsfUPGbsQEcH+t49GFyjX3H20ic/QGSs0vgq4i7uNZGRQRjWRNOeHzEwJaH3hHa9LtJj6HSWOFOzLgVHAzV/c/NhX7IfQylvKh8iY3y4Wz4cLLv0FicuatLIMEL5KQwUu6Njg1zGs9es74mkLgkzQzYI735Kc/m9DYZKsGcjHn+T2224szA/HCu65jcm2sY2NeqSVeHo1r+dXGSsm0EW1PN114aiJclgcsrKZoJ/4C2s8NF8G12WkV4ytEjuoi70lvpIunX1e7B/59Y92oh/wDqqbt60B4frPHkGoxWbh5noNsIfsaP6QuCMFqkj9kTrdfL+UHwb8jr8A6zhZRouNOuQQv97PDR2th0szTpASdb9G/bD+ZwLzjBsyevBCvxCxa0vbE3SZxbwpJcPEnKN3vsFklLoYZmmG6dis/TnMyDSq/g1wtRj5E2p3y/nN22yaGacT5V1URRUnMmFCCgYlP4vPi8iqWx4e4ghyr11CtuGS0Z4lAD1Od+OzHz0+QLoeMEZuN7J3RY7r3tKUOQpqAHIJ4be1U5gaeLV+CkwA31+KoXm8MyIh30QADHQc7XD3nKxS1F2pxBwjpGBfmipCXTJ20kxLaKQ8vgiYRtIkPmAF/lJ lukedavia@icloud.com\n",
+                state: req.body.state
+            };
+        },
 
         /**
          * Display information about this website.

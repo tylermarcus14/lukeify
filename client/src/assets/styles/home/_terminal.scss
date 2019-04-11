@@ -120,7 +120,8 @@ lukeify-terminal {
 
 #terminal-history {
   width:100%;
-    position:relative;
+  position:relative;
+  word-wrap: break-word;
 }
 
 #terminal-entry {
