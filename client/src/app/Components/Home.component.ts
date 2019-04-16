@@ -26,7 +26,7 @@ import {animate, AnimationEvent, state, style, transition, trigger} from '@angul
         </div>
 
         <p id="introduction">Hi, I'm Luke Davia—a software developer currently residing in
-            Wellington,&nbsp;New&nbsp;Zealand.</p>
+            Queenstown,&nbsp;New&nbsp;Zealand.</p>
 
         <h1><a class="anchor" name="skillset">Skillset</a></h1>
         <section id="skillset">
@@ -47,10 +47,28 @@ import {animate, AnimationEvent, state, style, transition, trigger} from '@angul
             <p>Some of what I've built. There's more on <a href="https://github.com/lukeify">GitHub</a>. Here's my <a href="assets/documents/cv-web.pdf" target="_blank">CV</a>.</p>
             <ul id="portfolio-entries">
                 <li class="portfolio-entry">
+                    <h2>Membership Management & Onboarding Revamp <span class="small">for NZPPI</span>
+                    </h2>
+                    <span class="dates">January 2018 – Ongoing</span>
+                    <span class="company-or-github"><a href="https://nzppi.org.nz/about">Company ⇒</a></span>
+                    <p>Developed & deployed an updated branding & web presence, elucidating the benefits of NZPPI
+                        membership through effective use of design and textual information.</p>
+                    <ul>
+                        <li class="tool-tag"><img src="assets/images/tools/laravel.png" alt="Laravel"
+                                                  title="Laravel"></li>
+                        <li class="tool-tag"><img src="assets/images/tools/composer.png" alt="Composer"
+                                                  title="Composer"></li>
+                        <li class="tool-tag"><img src="assets/images/tools/yarn.png" alt="Yarn" title="Yarn"></li>
+                        <li class="tool-tag"><img src="assets/images/tools/php.png" alt="PHP" title="PHP"></li>
+                        <li class="tool-tag"><img src="assets/images/tools/js.png" alt="JavaScript"
+                                                  title="JavaScript"></li>
+                    </ul>
+                </li>
+                <li class="portfolio-entry">
                     <h2>
                         Autodesk Building Information Management & Authentication Software <span class="small">for Caduceus Systems</span>
                     </h2>
-                    <span class="dates">February 2017 – Ongoing</span>
+                    <span class="dates">February 2017 – March 2019</span>
                     <span class="company-or-github"><a href="https://www.caduceus.co.nz/">Company ⇒</a></span>
                     <p>
                         Architected an authentication system in Node.js & Angular for an existing Building 
@@ -70,27 +88,9 @@ import {animate, AnimationEvent, state, style, transition, trigger} from '@angul
                     </ul>
                 </li>
                 <li class="portfolio-entry">
-                    <h2>Membership Management & Onboarding Revamp <span class="small">for NZPPI</span>
-                    </h2>
-                    <span class="dates">January 2018 – Ongoing</span>
-                    <span class="company-or-github"><a href="https://nzppi.org.nz/about">Company ⇒</a></span>
-                    <p>Developed & deployed an updated branding & web presence, elucidating the benefits of NZPPI
-                     membership through effective use of design and textual information.</p>
-                    <ul>
-                        <li class="tool-tag"><img src="assets/images/tools/laravel.png" alt="Laravel"
-                                                  title="Laravel"></li>
-                        <li class="tool-tag"><img src="assets/images/tools/composer.png" alt="Composer"
-                                                  title="Composer"></li>
-                        <li class="tool-tag"><img src="assets/images/tools/yarn.png" alt="Yarn" title="Yarn"></li>
-                        <li class="tool-tag"><img src="assets/images/tools/php.png" alt="PHP" title="PHP"></li>
-                        <li class="tool-tag"><img src="assets/images/tools/js.png" alt="JavaScript"
-                                                  title="JavaScript"></li>
-                    </ul>
-                </li>
-                <li class="portfolio-entry">
                     <h2>Ordering, Quoting, & Resource Management Software <span
                             class="small">for Caduceus Systems</span></h2>
-                    <span class="dates">January 2018 – Ongoing</span>
+                    <span class="dates">January 2018 – March 2019</span>
                     <span class="company-or-github"><a href="https://www.caduceus.co.nz/">Company ⇒</a></span>
                     <p>Architected a Ordering, Quoting, & Resource Management application, significantly improving 
                     day to day operations by automating a number of manual systems, improving business actionables, 
