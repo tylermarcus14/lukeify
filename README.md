@@ -58,7 +58,7 @@ yarn run client:build
 yarn run server:build
 ```
 
-Now ensure you have `./server/config.json` configured properly. Follow the exemplar configuration. Then, run `yarn run back:run:prod` using your favorite keep-alive tool, such as forever.js. To run the Twitter & Instagram updating functionality, schedule a cron to call `yarn run back:run:cron` at a frequency of your choosing. 
+Now ensure you have `./server/config.json` configured properly. Follow the exemplar configuration. Then, run `yarn run server:run:prod` using your favorite keep-alive tool, such as forever.js. To run the Twitter & Instagram updating functionality, schedule a cron to call `yarn run server:run:cron` at a frequency of your choosing. 
 
 ## Built With
 

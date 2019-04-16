@@ -25,7 +25,7 @@ import {filter} from 'rxjs/operators';
                 <ul id="nav-right">
                     <li><a href="https://www.linkedin.com/in/luke-davia-04728166/" target="_blank"><img src="assets/images/icons/linkedin.png" /></a></li>
                     <li><a href="https://github.com/lukeify" target="_blank"><img src="assets/images/icons/github.png" /></a></li>
-                    <li><a href="https://twitter.com/lukealization" target="_blank"><img src="assets/images/icons/twitter.png" /></a></li>
+                    <li><a href="https://twitter.com/lukeifynz" target="_blank"><img src="assets/images/icons/twitter.png" /></a></li>
                     <li><a href="https://instagram.com/lukeifynz" target="_blank"><img src="assets/images/icons/instagram.png" /></a></li>
                     <li><a href="https://vsco.co/lukeify" target="_blank"><img src="assets/images/icons/vsco.png" /></a></li>
                 </ul>
