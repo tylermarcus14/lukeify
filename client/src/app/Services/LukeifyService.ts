@@ -1,10 +1,9 @@
-import {Injectable} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
-import {map} from "rxjs/operators";
-import {Tweet} from "../Interfaces/Tweet";
-import {TerminalResponse} from "../Interfaces/TerminalResponse";
-import {TerminalState} from "../Interfaces/TerminalState";
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {Tweet} from '../Interfaces/Tweet';
+import {TerminalResponse} from '../Interfaces/TerminalResponse';
+import {TerminalState} from '../Interfaces/TerminalState';
 
 /**
  * @class LukeifyService
@@ -24,7 +23,7 @@ export class LukeifyService {
      *
      * @returns {Observable<Tweet[]>} - An array of tweets.
      */
-    public getTweets() : Observable<Tweet[]> {
+    public getTweets(): Observable<Tweet[]> {
         return this.http.get<Tweet[]>('/api/tweets');
     }
 
@@ -46,7 +45,7 @@ export class LukeifyService {
      *
      * @returns {Observable<TerminalSnapshot>} The next terminal configuration.
      */
-    public getCommand(state: TerminalState, entry: string, fs: any) : Observable<TerminalResponse> {
+    public getCommand(state: TerminalState, entry: string, fs: any): Observable<TerminalResponse> {
         return this.http.post<TerminalResponse>('/api/terminal/command', {
             state: state,
             entry: entry,
@@ -59,7 +58,7 @@ export class LukeifyService {
      *
      * @returns {Observable<TerminalSnapshot>} The initial terminal configuration.
      */
-    public getInitialTerminalConfiguration() : Observable<TerminalResponse> {
+    public getInitialTerminalConfiguration(): Observable<TerminalResponse> {
         return this.http.get<TerminalResponse>('/api/terminal');
     }
 }

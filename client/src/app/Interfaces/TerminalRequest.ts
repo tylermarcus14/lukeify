@@ -1,4 +1,4 @@
-import {TerminalState} from "./TerminalState";
+import {TerminalState} from './TerminalState';
 
 export interface TerminalRequest {
     state: TerminalState;

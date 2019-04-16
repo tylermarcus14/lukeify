@@ -1,4 +1,4 @@
-import {TwitterUser} from "./TwitterUser";
+import {TwitterUser} from './TwitterUser';
 
 export interface Tweet {
     created_at: string;

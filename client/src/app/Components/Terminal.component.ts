@@ -1,17 +1,9 @@
-import {
-    AfterViewInit,
-    Component,
-    ElementRef,
-    EventEmitter,
-    OnInit,
-    Output,
-    ViewChild
-} from "@angular/core";
-import {fromEvent} from "rxjs";
-import {first} from "rxjs/operators";
-import {LukeifyService} from "../Services/LukeifyService";
+import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {fromEvent} from 'rxjs';
+import {first} from 'rxjs/operators';
+import {LukeifyService} from '../Services/LukeifyService';
 import {TerminalResponse} from '../Interfaces/TerminalResponse';
-import {TerminalState} from "../Interfaces/TerminalState";
+import {TerminalState} from '../Interfaces/TerminalState';
 
 @Component({
     selector: 'lukeify-terminal',
@@ -48,83 +40,84 @@ export class TerminalComponent implements OnInit, AfterViewInit {
     /**
      *
      */
-    @Output() public emitHeight : EventEmitter<number> = new EventEmitter<number>();
+    @Output() public emitHeight: EventEmitter<number> = new EventEmitter<number>();
 
     /**
      *
      */
-    public entryStack = [{ original: "", altered: "" }];
+    public entryStack = [{ original: '', altered: '' }];
     public entryStackIndex = 0;
-    public entryStackType = "original";
+    public entryStackType = 'original';
 
     /**
      *
      */
-    public terminalHasFocus: boolean = true;
+    public terminalHasFocus = true;
     public terminalStateData: TerminalState;
-    public terminalPlaceholder: string = "Try \`help\` to get started.";
+    public terminalPlaceholder = 'Try \`help\` to get started.';
 
     /**
      *
      */
     private fs = {
-        "type": "dir",
-        "isPwd": false,
-        "aliases": ["/"],
-        "name": "",
-        "data": [
+        'type': 'dir',
+        'isPwd': false,
+        'aliases': ['/'],
+        'name': '',
+        'data': [
             {
-                "type": "dir",
-                "isPwd": false,
-                "name": "home",
-                "data": [
+                'type': 'dir',
+                'isPwd': false,
+                'name': 'home',
+                'data': [
                     {
-                        "type": "dir",
-                        "isPwd": true,
-                        "aliases": ["~"],
-                        "name": "visitor",
-                        "data": [
+                        'type': 'dir',
+                        'isPwd': true,
+                        'aliases': ['~'],
+                        'name': 'visitor',
+                        'data': [
                             {
-                                "type": "dir",
-                                "isPwd": false,
-                                "name": "downloads",
-                                "data": [
+                                'type': 'dir',
+                                'isPwd': false,
+                                'name': 'downloads',
+                                'data': [
                                     {
-                                        "type": "file",
-                                        "name": "test"
+                                        'type': 'file',
+                                        'name': 'test'
                                     }
                                 ]
                             },
                             {
-                                "type": "file",
-                                "name": "README.md",
-                                "data": "This is a simple JavaScript terminal playground that you can interact with that showcases some of my work."
+                                'type': 'file',
+                                'name': 'README.md',
+                                'data': `This is a simple JavaScript terminal playground that you can
+                                interact with that showcases some of my work.`
                             },
                             {
-                                "type": "dir",
-                                "isPwd": false,
-                                "name": "pictures",
-                                "data": []
+                                'type': 'dir',
+                                'isPwd': false,
+                                'name': 'pictures',
+                                'data': []
                             },
                             {
-                                "type": "dir",
-                                "isPwd": false,
-                                "name": "documents",
-                                "data": [
+                                'type': 'dir',
+                                'isPwd': false,
+                                'name': 'documents',
+                                'data': [
                                     {
-                                        "type": "file",
-                                        "name": "github.md",
-                                        "data": "This is some file"
+                                        'type': 'file',
+                                        'name': 'github.md',
+                                        'data': 'This is some file'
                                     },
                                     {
-                                        "type": "file",
-                                        "name": "about.md",
-                                        "data": "text"
+                                        'type': 'file',
+                                        'name': 'about.md',
+                                        'data': 'text'
                                     },
                                     {
-                                        "type": "file",
-                                        "name": "apps.md",
-                                        "data": ""
+                                        'type': 'file',
+                                        'name': 'apps.md',
+                                        'data': ''
                                     }]
                             }]
                     }]
@@ -178,7 +171,7 @@ export class TerminalComponent implements OnInit, AfterViewInit {
      *
      * @param {MouseEvent} $event - The event that triggered this function call.
      */
-    public terminalContainerClicked($event: MouseEvent) : void {
+    public terminalContainerClicked($event: MouseEvent): void {
         this._terminalEntry.nativeElement.focus();
         this.terminalHasFocus = true;
         $event.stopPropagation();
@@ -194,7 +187,7 @@ export class TerminalComponent implements OnInit, AfterViewInit {
      *
      * @param $event
      */
-    public onNgModelChange($event: KeyboardEvent) : void {
+    public onNgModelChange($event: KeyboardEvent): void {
     }
 
     /**
@@ -206,7 +199,7 @@ export class TerminalComponent implements OnInit, AfterViewInit {
      */
     public onKeyUp($event: KeyboardEvent): void {
         // When the enter key is pressed, send a request off to the server to interpret the result.
-        if ($event.key === "Enter") {
+        if ($event.key === 'Enter') {
             // Grab the current entry text.
             const entry = this.entryStack[this.entryStackIndex].original;
 
@@ -214,10 +207,10 @@ export class TerminalComponent implements OnInit, AfterViewInit {
             this.lukeifyService.getCommand(this.terminalStateData, entry, this.fs).subscribe((res: TerminalResponse) => {
 
                 // Unset the terminal placeholder.
-                this.terminalPlaceholder = "";
+                this.terminalPlaceholder = '';
 
                 // Before the history of the client-side terminal is cleared, execute any hooks.
-                for (let hook of res.beforeHook) {
+                for (const hook of res.beforeHook) {
                     this.hooks[hook]();
                 }
 
@@ -229,13 +222,13 @@ export class TerminalComponent implements OnInit, AfterViewInit {
                 }
 
                 // After the history of the client-size terminal is cleared, execute any hooks.
-                for (let hook of res.afterHook) {
+                for (const hook of res.afterHook) {
                     this.hooks[hook]();
                 }
 
                 // Push a new entry onto the entry stack so that the user can arrow key backwards and forwards through
                 // what they've typed.
-                this.entryStack.push({ "original": "", "altered": "" });
+                this.entryStack.push({ 'original': '', 'altered': '' });
                 this.entryStackIndex++;
 
                 // Update the terminal state from the server's response
@@ -270,7 +263,7 @@ export class TerminalComponent implements OnInit, AfterViewInit {
      * @private
      */
     public _clearTerminalHistory() {
-        this._terminalHistory.nativeElement.innerHTML = "";
+        this._terminalHistory.nativeElement.innerHTML = '';
     }
 
     /**
@@ -280,7 +273,7 @@ export class TerminalComponent implements OnInit, AfterViewInit {
      * @private
      */
     public _appendLastTerminalEntry(state: TerminalState, userEnteredEntry: string): void {
-        this._terminalHistory.nativeElement.innerHTML += this._createTerminalEntry(state) + userEnteredEntry + "<br/>";
+        this._terminalHistory.nativeElement.innerHTML += this._createTerminalEntry(state) + userEnteredEntry + '<br/>';
     }
 
     /**
@@ -289,7 +282,7 @@ export class TerminalComponent implements OnInit, AfterViewInit {
      * @private
      */
     public _appendTerminalResponse(response: string): void {
-        this._terminalHistory.nativeElement.innerHTML += response + "<br/>";
+        this._terminalHistory.nativeElement.innerHTML += response + '<br/>';
     }
 
     /**
@@ -313,7 +306,7 @@ export class TerminalComponent implements OnInit, AfterViewInit {
         if (!terminalState) {
             return null;
         }
-        let trimmedDirOrAlias = terminalState.pwd.split("/").pop();
+        let trimmedDirOrAlias = terminalState.pwd.split('/').pop();
 
         if (terminalState.alias !== null) {
             trimmedDirOrAlias = terminalState.alias;

@@ -1,8 +1,8 @@
-import {Component} from "@angular/core";
+import {Component} from '@angular/core';
 import {animate, AnimationEvent, state, style, transition, trigger} from '@angular/animations';
 
 @Component({
-    'selector': 'home',
+    'selector': 'lukeify-home',
     'template': `
         <section id="professional-outline"></section>
 
@@ -44,7 +44,8 @@ import {animate, AnimationEvent, state, style, transition, trigger} from '@angul
 
         <h1><a class="anchor" name="portfolio">Portfolio</a></h1>
         <section id="portfolio">
-            <p>Some of what I've built. There's more on <a href="https://github.com/lukeify">GitHub</a>. Here's my <a href="assets/documents/cv-web.pdf" target="_blank">CV</a>.</p>
+            <p>Some of what I've built. There's more on <a href="https://github.com/lukeify">GitHub</a>.
+                Here's my <a href="assets/documents/cv-web.pdf" target="_blank">CV</a>.</p>
             <ul id="portfolio-entries">
                 <li class="portfolio-entry">
                     <h2>Membership Management & Onboarding Revamp <span class="small">for NZPPI</span>
@@ -66,13 +67,14 @@ import {animate, AnimationEvent, state, style, transition, trigger} from '@angul
                 </li>
                 <li class="portfolio-entry">
                     <h2>
-                        Autodesk Building Information Management & Authentication Software <span class="small">for Caduceus Systems</span>
+                        Autodesk Building Information Management & Authentication Software
+                        <span class="small">for Caduceus Systems</span>
                     </h2>
                     <span class="dates">February 2017 – March 2019</span>
                     <span class="company-or-github"><a href="https://www.caduceus.co.nz/">Company ⇒</a></span>
                     <p>
-                        Architected an authentication system in Node.js & Angular for an existing Building 
-                        Information Management application. Further upgraded incrementally to add Autodesk bucket 
+                        Architected an authentication system in Node.js & Angular for an existing Building
+                        Information Management application. Further upgraded incrementally to add Autodesk bucket
                         management functionality later. Employed technical writing skills to document existing systems.
                     </p>
                     <ul>
@@ -92,8 +94,8 @@ import {animate, AnimationEvent, state, style, transition, trigger} from '@angul
                             class="small">for Caduceus Systems</span></h2>
                     <span class="dates">January 2018 – March 2019</span>
                     <span class="company-or-github"><a href="https://www.caduceus.co.nz/">Company ⇒</a></span>
-                    <p>Architected a Ordering, Quoting, & Resource Management application, significantly improving 
-                    day to day operations by automating a number of manual systems, improving business actionables, 
+                    <p>Architected a Ordering, Quoting, & Resource Management application, significantly improving
+                    day to day operations by automating a number of manual systems, improving business actionables,
                     and allowing for better client-supplier relationships.</p>
                     <ul>
                         <li class="tool-tag"><img src="assets/images/tools/php.png" alt="PHP" title="PHP"></li>
@@ -114,8 +116,8 @@ import {animate, AnimationEvent, state, style, transition, trigger} from '@angul
                     <h2>QuebecLimaMike <span class="small">for Revitworks</span></h2>
                     <span class="dates">July 2018 – Ongoing</span>
                     <span class="company-or-github"><a href="https://www.caduceus.co.nz/">Company ⇒</a></span>
-                    <p>Developed an event-based ASP.NET Core Application which listened for purchases on an Ecwid 
-                    storefont, subsequently generated product license keys to meet bespoke business requirements, 
+                    <p>Developed an event-based ASP.NET Core Application which listened for purchases on an Ecwid
+                    storefont, subsequently generated product license keys to meet bespoke business requirements,
                     resulting in significant time savings & increased customer satisfaction.</p>
                     <ul>
                         <li class="tool-tag"><img src="assets/images/tools/aspdotnetcore.png" alt="ASP.NET Core"
@@ -125,7 +127,9 @@ import {animate, AnimationEvent, state, style, transition, trigger} from '@angul
                 </li>
                 <li class="portfolio-entry">
                     <h2>fs.lukeify.com</h2>
-                    <span class="company-or-github"><a href="https://github.com/lukeify/lukeify-fs">View on GitHub ⇒</a></span>
+                    <span class="company-or-github">
+                        <a href="https://github.com/lukeify/lukeify-fs">View on GitHub ⇒</a>
+                    </span>
                     <p>Personal cloud-based file system & storage with drag+drop uploading written
                         in Vue.js. TypeScript-written express.js server with static nginx-based
                         file serving.</p>
@@ -142,8 +146,10 @@ import {animate, AnimationEvent, state, style, transition, trigger} from '@angul
                 </li>
                 <li class="portfolio-entry">
                     <h2>gpxify</h2>
-                    <span class="company-or-github"><a href="https://github.com/lukeify/gpxify">View on GitHub ⇒</a></span>
-                    <p>CLI app that allows for the linear interpolation of GPX tracklog data to geotag photos from 
+                    <span class="company-or-github">
+                        <a href="https://github.com/lukeify/gpxify">View on GitHub ⇒</a>
+                    </span>
+                    <p>CLI app that allows for the linear interpolation of GPX tracklog data to geotag photos from
                     GPSless cameras (such as some DSLRs) with GPS EXIF data.</p>
                     <ul>
                         <li class="tool-tag"><img src="assets/images/tools/rust.png" alt="Rust" title="Rust"></li>
@@ -173,7 +179,7 @@ import {animate, AnimationEvent, state, style, transition, trigger} from '@angul
                 </li>
                 <li class="portfolio-entry">
                     <h2>SpaceX Stats</h2>
-                    <p>Small fan site which track of the progress of private spaceflight company SpaceX, offering 
+                    <p>Small fan site which track of the progress of private spaceflight company SpaceX, offering
                     statistics and countdowns to launches.</p>
                     <ul>
                         <li class="tool-tag"><img src="assets/images/tools/php.png" alt="PHP" title="PHP"></li>
@@ -197,10 +203,11 @@ import {animate, AnimationEvent, state, style, transition, trigger} from '@angul
                 </li>
             </ul>
         </section>
-        
+
         <h1><a class="anchor" name="get-in-touch">Get In Touch</a></h1>
         <section id="get-in-touch">
-            <p style="margin-bottom:4em;">You can contact me at <a href="mailto:lukedavia@icloud.com">lukedavia@icloud.com</a>, or <a href="https://twitter.com/lukealization">send me a tweet</a>.</p>
+            <p style="margin-bottom:4em;">You can contact me at <a href="mailto:lukedavia@icloud.com">lukedavia@icloud.com</a>,
+                or <a href="https://twitter.com/lukealization">send me a tweet</a>.</p>
             <!-- https://cssanimation.rocks/clocks/ -->
         </section>
     `,
@@ -250,7 +257,7 @@ import {animate, AnimationEvent, state, style, transition, trigger} from '@angul
 export class HomeComponent {
     public dateOfBirth: Date = new Date(1995, 6, 12);
 
-    public isAnimating: boolean = false;
+    public isAnimating = false;
 
     public aboveTheFoldContentStates = {
         terminal: 'active',
@@ -268,11 +275,11 @@ export class HomeComponent {
      * @returns {string} The pixel height that the above the fold content element should be.
      */
     public get aboveTheFoldContentHeightInPx(): string {
-        if (typeof this.aboveTheFoldContentHeights.terminal === "number"
-            && typeof this.aboveTheFoldContentHeights.instagram === "number") {
-            return Math.max(...Object.values(this.aboveTheFoldContentHeights)) + "px";
+        if (typeof this.aboveTheFoldContentHeights.terminal === 'number'
+            && typeof this.aboveTheFoldContentHeights.instagram === 'number') {
+            return Math.max(...Object.values(this.aboveTheFoldContentHeights)) + 'px';
         }
-        return "750px"; // best guess
+        return '750px'; // best guess
     }
 
     public constructor() {}
@@ -282,10 +289,10 @@ export class HomeComponent {
      */
     public beginAnimationChange(): void {
         this.isAnimating = true;
-        if (this.aboveTheFoldContentStates.terminal === "active") {
-            this.aboveTheFoldContentStates.terminal = "inactive";
-        } else if (this.aboveTheFoldContentStates.instagram === "active") {
-            this.aboveTheFoldContentStates.instagram = "inactive";
+        if (this.aboveTheFoldContentStates.terminal === 'active') {
+            this.aboveTheFoldContentStates.terminal = 'inactive';
+        } else if (this.aboveTheFoldContentStates.instagram === 'active') {
+            this.aboveTheFoldContentStates.instagram = 'inactive';
         }
     }
 
@@ -298,9 +305,9 @@ export class HomeComponent {
         if (this.isAnimating) {
             this.isAnimating = false;
             if ($event.element['localName'].endsWith('terminal')) {
-                this.aboveTheFoldContentStates.instagram = "active";
+                this.aboveTheFoldContentStates.instagram = 'active';
             } else {
-                this.aboveTheFoldContentStates.terminal = "active";
+                this.aboveTheFoldContentStates.terminal = 'active';
             }
         }
     }

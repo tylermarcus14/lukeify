@@ -1,28 +1,35 @@
-import {Component, OnInit} from "@angular/core";
-import {LukeifyService} from "../Services/LukeifyService";
-import {Tweet} from "../Interfaces/Tweet";
+import {Component, OnInit} from '@angular/core';
+import {LukeifyService} from '../Services/LukeifyService';
+import {Tweet} from '../Interfaces/Tweet';
 
 @Component({
-    'selector':'twitter-feed',
+    'selector': 'lukeify-twitter-feed',
     'template': `
         <h1>Recent tweets</h1>
         <div *ngFor="let tweet of tweets" class="individual-tweet">
             <div class="twitter-deets">
                 <a [href]="profileUrl(tweet.user.screen_name)" target="_blank">
-                    <img [src]="tweet.user.profile_image_url_https | sanitize:'url'" width="42" height="42" alt="twitter icon" />
+                    <img [src]="tweet.user.profile_image_url_https | sanitize:'url'"
+                         width="42" height="42" alt="twitter icon" />
                 </a>
-                
+
                 <span class="tweet-time">
-                    <a [href]="tweetUrl(tweet) | sanitize:'url'" target="_blank">{{ humanReadableDelta(tweet.created_at) }}</a>
+                    <a [href]="tweetUrl(tweet) | sanitize:'url'" target="_blank">
+                        {{ humanReadableDelta(tweet.created_at) }}
+                    </a>
                 </span>
 
                 <div class="is-a-retweet" *ngIf="tweet.retweeted"></div>
             </div>
-            
+
             <div class="twitter-text">
                 <p class="title">
-                    <a [href]="profileUrl(tweet.user.screen_name) | sanitize:'url'" target="_blank">{{ tweet.user.name }}</a>
-                    <a [href]="profileUrl(tweet.user.screen_name) | sanitize:'url'" target="_blank">@{{ tweet.user.screen_name }}</a>
+                    <a [href]="profileUrl(tweet.user.screen_name) | sanitize:'url'" target="_blank">
+                        {{ tweet.user.name }}
+                    </a>
+                    <a [href]="profileUrl(tweet.user.screen_name) | sanitize:'url'" target="_blank">
+                        @{{ tweet.user.screen_name }}
+                    </a>
                 </p>
                 <p class="body" [innerHTML]="richText(tweet.text) | sanitize:'html'"></p>
 
@@ -45,11 +52,11 @@ import {Tweet} from "../Interfaces/Tweet";
 })
 export class TwitterFeedComponent implements OnInit {
 
-    public tweets : Tweet[] = [];
+    public tweets: Tweet[] = [];
 
     constructor(public lukeifyService: LukeifyService) {}
 
-    public ngOnInit() : void {
+    public ngOnInit(): void {
         this.lukeifyService.getTweets().subscribe(tweets => {
             this.tweets = tweets;
         });
@@ -60,7 +67,7 @@ export class TwitterFeedComponent implements OnInit {
      *
      * @returns {string}
      */
-    public tweetUrl(tweet: Tweet) : string {
+    public tweetUrl(tweet: Tweet): string {
         return 'https://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id_str;
     }
     /**
@@ -68,7 +75,7 @@ export class TwitterFeedComponent implements OnInit {
      *
      * @returns {string}
      */
-    public replyUrl(id_str: string) : string {
+    public replyUrl(id_str: string): string {
         return 'https://twitter.com/intent/tweet?in_reply_to=' + id_str;
     }
 
@@ -77,7 +84,7 @@ export class TwitterFeedComponent implements OnInit {
      *
      * @returns {string}
      */
-    public retweetUrl(id_str: string) : string {
+    public retweetUrl(id_str: string): string {
         return 'https://twitter.com/intent/retweet?tweet_id=' + id_str;
     }
 
@@ -86,7 +93,7 @@ export class TwitterFeedComponent implements OnInit {
      *
      * @returns {string}
      */
-    public likeUrl(id_str: string) : string {
+    public likeUrl(id_str: string): string {
         return 'https://twitter.com/intent/like?tweet_id=' + id_str;
     }
 
@@ -97,7 +104,7 @@ export class TwitterFeedComponent implements OnInit {
      *
      * @returns {string}
      */
-    public profileUrl(screen_name: string) : string {
+    public profileUrl(screen_name: string): string {
         return 'https://twitter.com/' + screen_name;
     }
 
@@ -110,13 +117,13 @@ export class TwitterFeedComponent implements OnInit {
      *
      * @returns {string}
      */
-    public humanReadableDelta(created_at: string) : string {
-        let months : string[] = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    public humanReadableDelta(created_at: string): string {
+        const months: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-        let tweetDate : Date = new Date(created_at);
-        let now : Date = new Date();
+        const tweetDate: Date = new Date(created_at);
+        const now: Date = new Date();
 
-        let delta : number = Math.abs(now.getTime() - tweetDate.getTime()) / 1000;
+        const delta: number = Math.abs(now.getTime() - tweetDate.getTime()) / 1000;
 
         // to debug
         if (delta < 60) {
@@ -126,7 +133,7 @@ export class TwitterFeedComponent implements OnInit {
         } else if (delta < 24 * 60 * 60) {
             return Math.round(delta / 60 / 60).toString() + 'h';
         } else {
-            return tweetDate.getDate() + " " + months[tweetDate.getMonth()];
+            return tweetDate.getDate() + ' ' + months[tweetDate.getMonth()];
         }
     }
 
@@ -137,16 +144,16 @@ export class TwitterFeedComponent implements OnInit {
      *
      * @returns {string}
      */
-    public richText(text: string) : string {
-        const links : RegExp = /https?:\/\/t.co\/\S+/gi;
+    public richText(text: string): string {
+        const links: RegExp = /https?:\/\/t.co\/\S+/gi;
         text = text.replace(links, match => `<a href="${match}" target="_blank">${match}</a>`);
 
-        const hashtags : RegExp = /#([_a-z0-9]+)/gi;
+        const hashtags: RegExp = /#([_a-z0-9]+)/gi;
         text = text.replace(hashtags, match => {
             return `<a href="https://twitter.com/search?q=${match.substr(1)}" target="_blank">${match}</a>`;
         });
 
-        const mentions : RegExp = /@([_a-z0-9]+)/gi;
+        const mentions: RegExp = /@([_a-z0-9]+)/gi;
         return text.replace(mentions, match => {
             return `<a href="https://twitter.com/${match.substr(1)}" target="_blank">${match}</a>`;
         });
