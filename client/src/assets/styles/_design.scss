@@ -1,14 +1,14 @@
 // Colors
 $purple:                                #8447b6;
-  $purple-dark:                         darken($purple, 20%);
+$purple-dark:                           darken($purple, 20%);
 $blue:                                  #6093c4;
 $sky:                                   #7ECEFD;
-    $sky-dark:                          darken($sky, 20%);
-    $sky-darker:                        darken($sky, 30%);
+$sky-dark:                              darken($sky, 20%);
+$sky-darker:                            darken($sky, 30%);
 $slate:                                 #3E454C;
-    $slate-light:                       lighten($slate, 40%);
+$slate-light:                           lighten($slate, 40%);
 $steel:                                 #F8F8FC;
-    $steel-dark:                        darken($steel, 10%);
+$steel-dark:                            darken($steel, 10%);
 
 // Variables
 $page-width:                            75em;
@@ -37,6 +37,7 @@ $inter-ui:                              'Inter UI', sans-serif;
   font-family: 'Inter UI';
   font-style:  normal;
   font-weight: 400;
+    font-display: block;
   src: url("../typefaces/Inter-UI-Regular.woff2") format("woff2"),
   url("../typefaces/Inter-UI-Regular.woff") format("woff");
 }
@@ -44,7 +45,8 @@ $inter-ui:                              'Inter UI', sans-serif;
   font-family: 'Inter UI';
   font-style:  italic;
   font-weight: 400;
-  src: url("../typefaces/Inter-UI-Italic.woff2") format("woff2"),
+    font-display: block;
+    src: url("../typefaces/Inter-UI-Italic.woff2") format("woff2"),
   url("../typefaces/Inter-UI-Italic.woff") format("woff");
 }
 
@@ -52,14 +54,18 @@ $inter-ui:                              'Inter UI', sans-serif;
   font-family: 'Inter UI';
   font-style:  normal;
   font-weight: 500;
-  src: url("../typefaces/Inter-UI-Medium.woff2") format("woff2"),
+    font-display: block;
+
+    src: url("../typefaces/Inter-UI-Medium.woff2") format("woff2"),
   url("../typefaces/Inter-UI-Medium.woff") format("woff");
 }
 @font-face {
   font-family: 'Inter UI';
   font-style:  italic;
   font-weight: 500;
-  src: url("../typefaces/Inter-UI-MediumItalic.woff2") format("woff2"),
+    font-display: block;
+
+    src: url("../typefaces/Inter-UI-MediumItalic.woff2") format("woff2"),
   url("../typefaces/Inter-UI-MediumItalic.woff") format("woff");
 }
 
@@ -67,14 +73,18 @@ $inter-ui:                              'Inter UI', sans-serif;
   font-family: 'Inter UI';
   font-style:  normal;
   font-weight: 600;
-  src: url("../typefaces/Inter-UI-SemiBold.woff2") format("woff2"),
+    font-display: block;
+
+    src: url("../typefaces/Inter-UI-SemiBold.woff2") format("woff2"),
   url("../typefaces/Inter-UI-SemiBold.woff") format("woff");
 }
 @font-face {
   font-family: 'Inter UI';
   font-style:  italic;
   font-weight: 600;
-  src: url("../typefaces/Inter-UI-SemiBoldItalic.woff2") format("woff2"),
+    font-display: block;
+
+    src: url("../typefaces/Inter-UI-SemiBoldItalic.woff2") format("woff2"),
   url("../typefaces/Inter-UI-SemiBoldItalic.woff") format("woff");
 }
 
@@ -82,14 +92,16 @@ $inter-ui:                              'Inter UI', sans-serif;
   font-family: 'Inter UI';
   font-style:  normal;
   font-weight: 700;
-  src: url("../typefaces/Inter-UI-Bold.woff2") format("woff2"),
+    font-display: block;
+    src: url("../typefaces/Inter-UI-Bold.woff2") format("woff2"),
   url("../typefaces/Inter-UI-Bold.woff") format("woff");
 }
 @font-face {
   font-family: 'Inter UI';
   font-style:  italic;
   font-weight: 700;
-  src: url("../typefaces/Inter-UI-BoldItalic.woff2") format("woff2"),
+    font-display: block;
+    src: url("../typefaces/Inter-UI-BoldItalic.woff2") format("woff2"),
   url("../typefaces/Inter-UI-BoldItalic.woff") format("woff");
 }
 
@@ -97,14 +109,16 @@ $inter-ui:                              'Inter UI', sans-serif;
   font-family: 'Inter UI';
   font-style:  normal;
   font-weight: 800;
-  src: url("../typefaces/Inter-UI-ExtraBold.woff2") format("woff2"),
+    font-display: block;
+    src: url("../typefaces/Inter-UI-ExtraBold.woff2") format("woff2"),
   url("../typefaces/Inter-UI-ExtraBold.woff") format("woff");
 }
 @font-face {
   font-family: 'Inter UI';
   font-style:  italic;
   font-weight: 800;
-  src: url("../typefaces/Inter-UI-ExtraBoldItalic.woff2") format("woff2"),
+    font-display: block;
+    src: url("../typefaces/Inter-UI-ExtraBoldItalic.woff2") format("woff2"),
   url("../typefaces/Inter-UI-ExtraBoldItalic.woff") format("woff");
 }
 
@@ -112,13 +126,15 @@ $inter-ui:                              'Inter UI', sans-serif;
   font-family: 'Inter UI';
   font-style:  normal;
   font-weight: 900;
-  src: url("../typefaces/Inter-UI-Black.woff2") format("woff2"),
+    font-display: block;
+    src: url("../typefaces/Inter-UI-Black.woff2") format("woff2"),
   url("../typefaces/Inter-UI-Black.woff") format("woff");
 }
 @font-face {
   font-family: 'Inter UI';
   font-style:  italic;
   font-weight: 900;
-  src: url("../typefaces/Inter-UI-BlackItalic.woff2") format("woff2"),
+    font-display: block;
+    src: url("../typefaces/Inter-UI-BlackItalic.woff2") format("woff2"),
   url("../typefaces/Inter-UI-BlackItalic.woff") format("woff");
 }
