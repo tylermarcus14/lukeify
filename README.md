@@ -58,7 +58,8 @@ yarn run client:build
 yarn run server:build
 ```
 
-Now ensure you have `./server/config.json` configured properly. Follow the exemplar configuration. Then, run `yarn run server:run:prod` using your favorite keep-alive tool, such as forever.js. To run the Twitter & Instagram updating functionality, schedule a cron to call `yarn run server:run:cron` at a frequency of your choosing. 
+Now ensure you have `./server/config.json` configured properly. Follow the exemplar configuration. Then, run `yarn run server:run:prod` using your favorite keep-alive tool, such as forever.js. To run the Twitter & Instagram updating functionality, schedule a cron to call `yarn run server
+:run:cron` at a frequency of your choosing. 
 
 ## Built With
 
@@ -67,6 +68,17 @@ Now ensure you have `./server/config.json` configured properly. Follow the exemp
 * Yarn (Package Manager)
 * Angular (Frontend Framework)
 * Sass (Styling)
+
+## Todos
+
+* Add profile image to above-the-fold content.
+* Figure out why Terminal & Instagram don't load on mobile devices, but do in mobile responsive views.
+* Don't preload Instagram images until after the page is loaded.
+* Migrate tool icon images to WebP.
+* Cohesively update dependencies for both client & server.
+* Utilise some form of privacy-respecting analytics to determine page views.
+* Utilise `font-display` property for Inter UI.
+* 
 
 ## Versioning
 
